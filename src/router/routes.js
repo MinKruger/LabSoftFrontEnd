@@ -1,10 +1,43 @@
-
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      {
+        path: '',
+        name: 'Home',
+        component: () => import('pages/Home.vue')
+      },
+      {
+        path: 'atleticas',
+        name: 'Athletics',
+        component: () => import('pages/Athletics.vue')
+      },
+      {
+        path: 'campeonatos',
+        name: 'Championships',
+        component: () => import('pages/Championships.vue')
+      },
+      {
+        path: 'jogos',
+        name: 'Matches',
+        component: () => import('pages/Matches.vue')
+      },
+      {
+        path: 'jogadores',
+        name: 'Players',
+        component: () => import('pages/Players.vue')
+      },
+      {
+        path: 'noticias',
+        name: 'News',
+        component: () => import('pages/News.vue')
+      },
+      {
+        path: 'parceiros',
+        name: 'Partners',
+        component: () => import('pages/Partners.vue')
+      }
     ]
   },
 
