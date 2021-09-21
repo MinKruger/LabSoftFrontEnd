@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin" style="background: #1B1C30">
       <q-form @submit.prevent="submit">
-        <dialog-header v-bind="headerInfo" />
+        <dialog-header :icon="headerIcon" :title="headerTitle" />
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Nome</p>
           <q-input
@@ -76,12 +76,14 @@ export default {
     athletic: Object
   },
   data: () => ({
-    headerInfo: {
-      title: 'Nova Atlética',
-      icon: ATHLETICS.icon
-    },
+    headerIcon: ATHLETICS.icon,
     innerAthletic: { ...defaultAhletic }
   }),
+  computed: {
+    headerTitle () {
+      return this.innerAthletic.id ? 'Editar Atlética' : 'Nova Atlética'
+    }
+  },
   created () {
     if (this.athletic) Object.assign(this.innerAthletic, this.athletic)
   },
