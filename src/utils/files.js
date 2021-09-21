@@ -28,3 +28,22 @@ export const checkFileType = (file, accept) => {
     return false
   })
 }
+
+/**
+ * Converts a file upload into a base64 string
+ *
+ * @param {File} fileUpload File upload object
+ *
+ * @returns {string} Converted base64 string
+ */
+export const getFileBase64 = async fileUpload => {
+  return new Promise((resolve, reject) => {
+    if (!fileUpload) {
+      return reject()
+    }
+    const reader = new FileReader()
+    reader.readAsDataURL(fileUpload)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+}

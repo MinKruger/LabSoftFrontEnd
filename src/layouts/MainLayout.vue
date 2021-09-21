@@ -56,6 +56,10 @@ const drawerLinks = [
   {
     ...PAGE.PARTNERS,
     to: { name: 'Partners' }
+  },
+  {
+    ...PAGE.USERS,
+    to: { name: 'Users' }
   }
 ]
 
