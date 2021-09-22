@@ -4,7 +4,7 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-primary"
+      content-class="bg-drawer"
       :width="275"
     >
       <div class="text-center">
@@ -74,3 +74,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.bg-drawer {
+  background: rgba($secondary, 0.7);
+}
+</style>
