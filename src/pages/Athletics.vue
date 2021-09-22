@@ -128,7 +128,12 @@ export default {
       this.$q
         .dialog({
           component: AddAthleticDialog,
-          athletic
+          athletic,
+          onDelete: _athletic => {
+            console.log(_athletic)
+            const index = this.athletics.findIndex(a => a.id === _athletic.id)
+            if (index > -1) this.athletics.splice(index, 1)
+          }
         })
         .onOk(_athletic => {
           if (_athletic.id) {

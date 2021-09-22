@@ -4,6 +4,7 @@
     <span class="text-uppercase text-body1" style="font-family: monospace;">
       {{ title }}
     </span>
+    <slot />
   </q-card-section>
 </template>
 

@@ -2,7 +2,18 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin" style="background: #1B1C30">
       <q-form @submit.prevent="submit">
-        <dialog-header :icon="headerIcon" :title="headerTitle" />
+        <dialog-header :icon="headerIcon" :title="headerTitle">
+          <q-btn
+            v-if="innerAthletic.id"
+            @click="deleteAthletic"
+            icon="o_delete_forever"
+            class="absolute-top-right"
+            color="pink"
+            style="top: 10px; right: 10px"
+            flat
+            round
+          />
+        </dialog-header>
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Nome</p>
           <q-input
@@ -73,7 +84,8 @@ const defaultAhletic = {
 export default {
   components: { DialogHeader, FileDragDrop, DatePicker },
   props: {
-    athletic: Object
+    athletic: Object,
+    onDelete: Function
   },
   data: () => ({
     headerIcon: ATHLETICS.icon,
@@ -103,6 +115,28 @@ export default {
     },
     onCancelClick () {
       this.hide()
+    },
+    deleteAthletic () {
+      this.$q
+        .dialog({
+          title: 'Excluir Atlética',
+          message: 'Deseja realmente excluir esta atlética?',
+          class: 'bg-primary',
+          ok: {
+            label: 'Excluir',
+            color: 'blue',
+            padding: 'sm md'
+          },
+          cancel: {
+            color: 'white',
+            outline: true,
+            padding: 'sm md'
+          }
+        })
+        .onOk(() => {
+          this.onDelete && this.onDelete(this.innerAthletic)
+          this.hide()
+        })
     },
     // Rules
     required,
