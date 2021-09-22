@@ -2,7 +2,7 @@
   <q-item
     :to="to"
     class="rounded-borders inactive-tab"
-    active-class="active-tab"
+    active-class="active-tab text-weight-bold"
     clickable
     exact
   >
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'EssentialLink',
+  name: 'DrawerItem',
   props: {
     title: {
       type: String,
@@ -51,7 +51,7 @@ body.body--dark {
   }
 
   .inactive-tab {
-    color: $secondary;
+    color: $accent;
   }
 }
 </style>
