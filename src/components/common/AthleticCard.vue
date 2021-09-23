@@ -6,6 +6,12 @@
       alt="Fundo Atlética"
     />
     <q-img
+      v-if="athletic.logo.includes('base64')"
+      class="absolute-center logo"
+      :src="athletic.logo"
+    />
+    <q-img
+      v-else
       class="absolute-center logo"
       :src="`athletic_logos/${athletic.logo}`"
       alt="Logo Atlética"

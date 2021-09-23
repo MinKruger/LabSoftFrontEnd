@@ -78,7 +78,8 @@ import { required, validDate } from 'src/utils/rules'
 const defaultAhletic = {
   name: '',
   logo: null,
-  created_at: ''
+  created_at: '',
+  sport: 'basketball'
 }
 
 export default {
@@ -110,6 +111,7 @@ export default {
       this.$emit('hide')
     },
     submit () {
+      console.log(this.innerAthletic)
       this.$emit('ok', this.innerAthletic)
       this.hide()
     },

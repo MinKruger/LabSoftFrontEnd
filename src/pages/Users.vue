@@ -17,14 +17,12 @@
         </div>
       </template>
     </page-header>
-    <div class="row q-col-gutter-sm">
-      <div
+    <div
         v-for="user in users"
         :key="user.id"
-        class="col-6 col-sm-4 col-md-2 col-xl-1"
+        class="users-grid"
       >
-        <user-card @click.native="openAddUserDialog(user)" :user="user" />
-      </div>
+      <user-card @click.native="openAddUserDialog(user)" :user="user" />
     </div>
   </q-page>
 </template>
@@ -40,12 +38,21 @@ export default {
   name: 'Users',
   data: () => ({
     headerInfo: USERS,
-    users: [{ id: 1, name: 'Bernardo' }]
+    users: [
+      {
+        id: 1,
+        name: 'Nome Sobrenome',
+        email: 'emailqualquer@hotmail.com',
+        type: 'Tipo de permissão',
+        athletic: 'Nome da atlética',
+        picture: 'picture1.png'
+      }
+    ]
   }),
-  async created () {
-    const { data } = await this.$axios.get('atletica')
-    this.users = data
-  },
+  // async created () {
+  //   const { data } = await this.$axios.get('atletica')
+  //   this.users = data
+  // },
   methods: {
     openAddUserDialog (user) {
       this.$q
@@ -67,3 +74,12 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(209px, 1fr));
+  gap: 16px;
+}
+
+</style>

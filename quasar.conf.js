@@ -34,7 +34,7 @@ module.exports = function (/* ctx */) {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font',
+      // 'roboto-font',
       'material-icons',
       'material-icons-outlined'
     ],

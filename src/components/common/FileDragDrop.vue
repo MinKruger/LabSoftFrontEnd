@@ -33,12 +33,17 @@
           />
           <!-- <label for="inputFieldHandler" class="block cursor-pointer"> -->
           <div class="text-center">
-            <p class="text-h6 text-weight-medium">
-              Arraste o arquivo aqui!
-            </p>
-            <p class="text-body1" v-if="!dragOver">
-              Ou clique para selecionar do computador.
-            </p>
+            <picture class="picture-dropped" v-if="base64File.length > 0">
+              <img :src="base64File" alt="Image">
+            </picture>
+            <template v-else>
+              <p class="text-h6 text-weight-medium">
+                Arraste o arquivo aqui!
+              </p>
+              <p class="text-body1" v-if="!dragOver">
+                Ou clique para selecionar do computador.
+              </p>
+            </template>
           </div>
           <!-- </label> -->
         </q-card-section>
@@ -80,7 +85,7 @@
 
 <script>
 import { exportFile } from 'quasar'
-import { checkFileType } from 'src/utils/files'
+import { checkFileType, getFileBase64 } from 'src/utils/files'
 const containerClass = 'bg-primary'
 const dragOverClass = 'bg-secondary'
 
@@ -103,7 +108,8 @@ export default {
     hideBottomSpace: Boolean
   },
   data: () => ({
-    dragOver: false
+    dragOver: false,
+    base64File: ''
   }),
   computed: {
     inputVal: {
@@ -114,7 +120,7 @@ export default {
         if (!val) {
           this.$refs.fileInput.value = ''
         }
-        this.$emit('input', val)
+        this.$emit('input', this.base64File)
       }
     },
     fileNameVal () {
@@ -138,13 +144,15 @@ export default {
     }
   },
   methods: {
-    onChange (event) {
+    async onChange (event) {
       const [file] = event.target.files
+      this.base64File = await getFileBase64(file)
       if (this.checkFileType(file)) this.inputVal = file
     },
-    onDrop (event) {
+    async onDrop (event) {
       const [file] = event.dataTransfer.files
       this.clearClasses(event)
+      this.base64File = await getFileBase64(file)
       if (this.checkFileType(file)) this.inputVal = file
     },
     onDragOver (event) {
@@ -189,5 +197,20 @@ export default {
 <style lang="scss">
 .drag-drop-file-name {
   padding-top: 16px !important;
+}
+
+.text-center {
+  .picture-dropped {
+    display: block;
+    width: 100%;
+    height: 100px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+    }
+  }
 }
 </style>
