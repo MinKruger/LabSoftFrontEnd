@@ -5,6 +5,12 @@
       :src="`athletic_sports/${athletic.sport}.svg`"
     />
     <q-img
+      v-if="athletic.logo.includes('base64')"
+      class="absolute-center logo"
+      :src="athletic.logo"
+    />
+    <q-img
+      v-else
       class="absolute-center logo"
       :src="`athletic_logos/${athletic.logo}`"
     />
