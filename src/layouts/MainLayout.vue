@@ -79,4 +79,8 @@ export default {
 .bg-drawer {
   background: rgba($secondary, 0.7);
 }
+
+* {
+  font-family: $font;
+}
 </style>
