@@ -69,8 +69,38 @@ import { sortOptions } from 'src/constants/athletics'
 import AddAthleticDialog from 'src/components/dialogs/AddAthleticDialog.vue'
 
 const athletics = [
-  { id: 1, name: 'Milton Campos', created_at: '2021-09-18' },
-  { id: 2, name: 'Medicina Claretiano', created_at: '2021-09-18' }
+  {
+    id: 1,
+    name: 'Milton Campos',
+    created_at: '2021-09-18',
+    color: 'white',
+    logo: 'logo1.png',
+    sport: 'basketball'
+  },
+  {
+    id: 2,
+    name: 'Medicina Claretiano',
+    created_at: '2021-09-18',
+    color: 'blue',
+    logo: 'logo2.png',
+    sport: 'basketball'
+  },
+  {
+    id: 3,
+    name: 'Atlética Primata',
+    created_at: '2021-09-18',
+    color: 'yellow',
+    logo: 'logo3.png',
+    sport: 'basketball'
+  },
+  {
+    id: 4,
+    name: 'Educação Física',
+    created_at: '2021-09-18',
+    color: 'orange',
+    logo: 'logo4.png',
+    sport: 'basketball'
+  }
 ]
 
 export default {
@@ -86,12 +116,24 @@ export default {
     // Atléticas
     athletics
   }),
+  async created () {
+    await this.getAthletics()
+  },
   methods: {
+    async getAthletics () {
+      const { data } = await this.$axios.get('atletica')
+      console.log(data)
+    },
     openAddAthleticDialog (athletic) {
       this.$q
         .dialog({
           component: AddAthleticDialog,
-          athletic
+          athletic,
+          onDelete: _athletic => {
+            console.log(_athletic)
+            const index = this.athletics.findIndex(a => a.id === _athletic.id)
+            if (index > -1) this.athletics.splice(index, 1)
+          }
         })
         .onOk(_athletic => {
           if (_athletic.id) {
