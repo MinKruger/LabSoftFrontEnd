@@ -4,7 +4,6 @@ import axios from 'axios'
 
 export default ({ Vue, router, store }) => {
   Vue.prototype.$axios = axios.create({
-    withCredentials: true,
     baseURL: process.env.API_URL,
     timeout: 180000,
     headers: {

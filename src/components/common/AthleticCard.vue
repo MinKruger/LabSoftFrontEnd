@@ -3,10 +3,12 @@
     <img
       class="absolute-top sports-bg"
       :src="`athletic_sports/${athletic.sport}.svg`"
+      alt="Fundo Atlética"
     />
     <q-img
       class="absolute-center logo"
       :src="`athletic_logos/${athletic.logo}`"
+      alt="Logo Atlética"
     />
     <div :class="['ellipse', `ellipse-${athletic.color}`]" />
     <div
