@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-// import { handleErrors } from 'src/utils/api'
+import { handleErrors } from 'src/utils/api'
 
 export default ({ Vue, router, store }) => {
   Vue.prototype.$axios = axios.create({
-    baseURL: 'http://52.55.79.223:5555',
+    baseURL: process.env.API_URL,
     timeout: 180000,
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
@@ -20,8 +20,6 @@ export default ({ Vue, router, store }) => {
       return request
     },
     error => {
-      Vue.prototype.$q.loading.hide()
-
       return Promise.reject(error)
     }
   )
@@ -31,9 +29,14 @@ export default ({ Vue, router, store }) => {
       return response
     },
     error => {
-      // if (!error.config.ignoreErrorHandling) {
-      //   return handleErrors(error, { router, store, axios, customErrorHandlers: error.config.customErrorHandlers })
-      // }
+      if (!error.config.ignoreErrorHandling) {
+        return handleErrors(error, {
+          router,
+          store,
+          axios,
+          customErrorHandlers: error.config.customErrorHandlers
+        })
+      }
 
       return Promise.reject(error)
     }
