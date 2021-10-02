@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center" padding>
     <auth-card style="width: 400px">
-      <q-form @submit.prevent="getCode">
+      <q-form @submit.prevent="changePassword">
         <q-card-section
           class="text-center relative-position text-body1 text-weight-medium text-uppercase"
         >
@@ -68,11 +68,14 @@ export default {
     user: { ...defaultUser }
   }),
   methods: {
-    async getCode () {
-      await this.$axios.post('forgot-password', { email: this.email })
+    async changePassword () {
+      await this.$axios.post('recover-password', {
+        email: this.email,
+        ...this.user
+      })
       this.$q.notify({
         type: 'positive',
-        message: 'O código para recuperação foi enviado para seu e-mail'
+        message: 'Sua senha foi alterada com sucesso'
       })
     },
     // Rules
