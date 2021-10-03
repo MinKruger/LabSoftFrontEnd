@@ -6,7 +6,7 @@
       :src="news.photo_url"
       style="min-width: 150px"
     >
-      <div class="fit image-gradient" />
+      <div class="fit news-card-image-gradient" />
     </q-img>
     <div class="q-ml-sm relative-position">
       <div class="row">
@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.image-gradient {
+.news-card-image-gradient {
   background-image: linear-gradient(
     to left,
     rgba($secondary, 0.9),
