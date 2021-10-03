@@ -1,5 +1,26 @@
 const routes = [
   {
+    path: '/login',
+    component: () => import('layouts/BlankLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Login',
+        component: () => import('pages/Login.vue')
+      },
+      {
+        path: 'esqueci-a-senha',
+        name: 'ForgotPassword',
+        component: () => import('pages/ForgotPassword.vue')
+      },
+      {
+        path: 'alterar-senha',
+        name: 'RecoverPassword',
+        component: () => import('pages/RecoverPassword.vue')
+      }
+    ]
+  },
+  {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [

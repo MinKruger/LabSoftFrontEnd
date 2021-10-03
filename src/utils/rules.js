@@ -27,6 +27,17 @@ export const required = (val, options, msg) => {
   return !!val || msg
 }
 
+// eslint-disable-next-line no-useless-escape
+export const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+export const validEmail = (val, options, msg) => {
+  const defaults = {}
+  Object.assign(defaults, options)
+  msg ??= 'Por favor insira um e-mail válido.'
+
+  return (typeof val === 'string' && emailPattern.test(val)) || msg
+}
+
 export const validDate = (val, options, msg) => {
   const defaults = {}
   Object.assign(defaults, options)
