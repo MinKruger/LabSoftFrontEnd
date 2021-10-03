@@ -26,6 +26,7 @@
             label="Obter Código"
             padding="sm xl"
             class="text-weight-bold"
+            :loading="codeLoading"
           />
           <q-btn
             :to="{ name: 'RecoverPassword' }"
@@ -49,15 +50,23 @@ export default {
   components: { AuthCard },
   name: 'Login',
   data: () => ({
-    email: ''
+    email: '',
+    codeLoading: false
   }),
   methods: {
     async getCode () {
-      await this.$axios.post('forgot-password', { email: this.email })
-      this.$q.notify({
-        type: 'positive',
-        message: 'O código para recuperação foi enviado para seu e-mail'
-      })
+      try {
+        this.codeLoading = true
+        // TODO: ver rota correta no backend
+        await this.$axios.post('forgot-password', { email: this.email })
+        this.$q.notify({
+          type: 'positive',
+          message: 'O código para recuperação foi enviado para seu e-mail'
+        })
+        await this.$router.push({ name: 'RecoverPassword' })
+      } finally {
+        this.codeLoading = false
+      }
     },
     // Rules
     required,

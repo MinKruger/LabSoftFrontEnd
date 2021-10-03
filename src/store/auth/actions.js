@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 export async function attemptLogin ({ commit }, userCredentials) {
-  await Vue.prototype.$axios('csrf-cookie')
+  // TODO: ver rota correta no backend
   const { data } = await Vue.prototype.$axios.post('login', userCredentials, {
     customErrorHandlers: {
       401: data => {

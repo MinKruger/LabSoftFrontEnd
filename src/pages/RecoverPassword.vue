@@ -44,6 +44,7 @@
             label="Alterar"
             padding="sm xl"
             class="text-weight-bold"
+            :loading="recoverLoading"
           />
         </q-card-actions>
       </q-form>
@@ -65,18 +66,26 @@ export default {
   name: 'Login',
   data: () => ({
     email: '',
-    user: { ...defaultUser }
+    user: { ...defaultUser },
+    recoverLoading: false
   }),
   methods: {
     async changePassword () {
-      await this.$axios.post('recover-password', {
-        email: this.email,
-        ...this.user
-      })
-      this.$q.notify({
-        type: 'positive',
-        message: 'Sua senha foi alterada com sucesso'
-      })
+      try {
+        this.recoverLoading = true
+        // TODO: ver rota correta no backend
+        await this.$axios.post('recover-password', {
+          email: this.email,
+          ...this.user
+        })
+        this.$q.notify({
+          type: 'positive',
+          message: 'Sua senha foi alterada com sucesso'
+        })
+        await this.$router.push({ name: 'Login' })
+      } finally {
+        this.recoverLoading = false
+      }
     },
     // Rules
     required

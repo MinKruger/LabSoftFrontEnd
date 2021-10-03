@@ -28,6 +28,7 @@
             label="Fazer Login"
             padding="sm xl"
             class="text-weight-bold"
+            :loading="loginLoading"
           />
           <q-btn
             :to="{ name: 'ForgotPassword' }"
@@ -56,15 +57,21 @@ export default {
   components: { AuthCard },
   name: 'Login',
   data: () => ({
-    user: { ...defaultUser }
+    user: { ...defaultUser },
+    loginLoading: false
   }),
   methods: {
     async attemptLogin () {
-      await this.$store.dispatch('auth/attemptLogin', this.user)
-      this.$q.notify({
-        type: 'positive',
-        message: 'Login realizado com sucesso'
-      })
+      try {
+        this.loginLoading = true
+        await this.$store.dispatch('auth/attemptLogin', this.user)
+        this.$q.notify({
+          type: 'positive',
+          message: 'Login realizado com sucesso'
+        })
+      } finally {
+        this.loginLoading = false
+      }
     },
     // Rules
     required,
