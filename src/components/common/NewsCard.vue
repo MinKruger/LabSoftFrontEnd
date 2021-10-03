@@ -17,7 +17,7 @@
           <p class="text-body1 text-weight-bold ellipsis-2-lines">
             {{ news.title }}
           </p>
-          <q-card-section v-if="tags.length > 0" class="row q-gutter-x-sm">
+          <q-card-section v-if="tags.length > 0" class="row q-gutter-sm">
             <q-badge
               v-for="tag in tags"
               :key="tag"
@@ -58,7 +58,7 @@
           </q-btn>
         </div>
       </div>
-      <div class="absolute-bottom-right q-pa-sm text-caption text-grey-5">
+      <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5">
         {{ newsCreatedAt }}
       </div>
     </div>
