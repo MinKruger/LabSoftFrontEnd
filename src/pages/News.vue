@@ -1,24 +1,21 @@
 <template>
   <q-page padding>
     <page-header v-bind="headerInfo">
-      <div class="row q-gutter-sm">
-        <q-input
-          filled
-          label="Pesquise pelo nome, cor..."
-          style="width: 300px"
-          dense
-        >
-          <template #prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-        <q-btn
-          @click="() => openAddNewsDialog()"
-          label="Adicionar"
-          color="blue"
-          class="text-weight-bold q-px-md"
-        />
-      </div>
+      <template #after>
+        <div class="row q-gutter-sm">
+          <q-input filled label="Pesquise notícias" style="width: 300px" dense>
+            <template #prepend>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+          <q-btn
+            @click="() => openAddNewsDialog()"
+            label="Nova Postagem"
+            color="blue"
+            class="text-weight-bold q-px-md"
+          />
+        </div>
+      </template>
     </page-header>
     <div class="row q-gutter-sm q-mb-md">
       <q-select
@@ -83,8 +80,7 @@ export default {
         id: 1,
         posted_by: 'João Romalho',
         title: 'Atléticas da UVV fazem parceria com atléticas da Ufes',
-        sport: 'Basquete',
-        gender: 'Masculino',
+        tags: 'Basquete, Masculino',
         created_at: '2021-20-09',
         photo_url:
           'https://www.seculodiario.com.br/images/p/35250/UVV_Fachada_Divulgao.jpg',

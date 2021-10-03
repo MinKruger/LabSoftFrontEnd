@@ -17,14 +17,15 @@
           <p class="text-body1 text-weight-bold ellipsis-2-lines">
             {{ news.title }}
           </p>
-          <div class="row q-gutter-x-sm">
-            <q-badge v-bind="sportChip" class="q-py-xs q-px-sm" />
+          <q-card-section v-if="tags.length > 0" class="row q-gutter-x-sm">
             <q-badge
-              v-if="news.gender"
-              v-bind="genderChip"
+              v-for="tag in tags"
+              :key="tag"
+              :label="tag"
+              :color="getTagColor(tag)"
               class="q-py-xs q-px-sm"
             />
-          </div>
+          </q-card-section>
         </div>
         <div class="col-auto">
           <q-btn @click.stop icon="more_vert" size="sm" round flat>
@@ -65,8 +66,9 @@
 </template>
 
 <script>
-import { gendersColors, sportsColors } from 'src/constants/news'
+import { tagsColors } from 'src/constants/news'
 import { date } from 'quasar'
+import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 
 export default {
   name: 'NewsCard',
@@ -77,28 +79,22 @@ export default {
     }
   },
   computed: {
-    sportChip () {
-      return {
-        label: this.news.sport,
-        color: sportsColors[this.news.sport]
-      }
-    },
-    genderChip () {
-      return {
-        label: this.news.gender,
-        color: gendersColors[this.news.gender]
-      }
-    },
     newsCreatedAt () {
       return date.formatDate(
         date.extractDate(this.news.created_at, 'YYYY-MM-DD'),
         'DD, MMMM [de] YYYY'
       )
+    },
+    tags () {
+      return this.news.tags.split(/\s*,\s*/)
     }
   },
   methods: {
     editNews () {
-      //
+      this.$q.dialog({
+        component: AddNewsDialog,
+        news: this.news
+      })
     },
     deleteNews () {
       this.$q
@@ -121,6 +117,9 @@ export default {
           this.$emit('delete', this.news)
           this.hide()
         })
+    },
+    getTagColor (tag) {
+      return tagsColors[tag]
     }
   }
 }
