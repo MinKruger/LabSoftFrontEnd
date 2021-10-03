@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin bg-primary news-dialog">
       <dialog-header :icon="headerIcon" title="Visualizar Postagem" />
-      <q-img width="100%" height="200px" :src="news.photo_url">
+      <q-img width="100%" height="200px" :src="news.photo">
         <div
           class="text-h6 text-weight-bold absolute-bottom"
           style="background: none; z-index: 1"
@@ -86,19 +86,18 @@ export default {
     onDialogHide () {
       this.$emit('hide')
     },
-    submit () {
-      console.log(this.innerAthletic)
-      this.$emit('ok', this.innerAthletic)
-      this.hide()
-    },
     onCancelClick () {
       this.hide()
     },
     editNews () {
-      this.$q.dialog({
-        component: AddNewsDialog,
-        news: this.news
-      })
+      this.$q
+        .dialog({
+          component: AddNewsDialog,
+          news: this.news
+        })
+        .onOk(news => {
+          this.$emit('ok', news)
+        })
     },
     getTagColor (tag) {
       return tagsColors[tag]
@@ -108,11 +107,6 @@ export default {
 </script>
 
 <style lang="scss">
-.news-dialog {
-  max-width: 700px !important;
-  width: 100%;
-}
-
 .news-dialog-image-gradient {
   background: linear-gradient(
     to top,

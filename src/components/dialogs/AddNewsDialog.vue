@@ -95,7 +95,6 @@ export default {
       this.$emit('hide')
     },
     submit () {
-      console.log(this.innerNews)
       this.$emit('ok', this.innerNews)
       this.hide()
     },

@@ -3,12 +3,12 @@
     <q-img
       width="150px"
       height="150px"
-      :src="news.photo_url"
+      :src="news.photo"
       style="min-width: 150px"
     >
       <div class="fit news-card-image-gradient" />
     </q-img>
-    <div class="q-ml-sm relative-position">
+    <div class="q-ml-sm relative-position" style="flex: 1">
       <div class="row">
         <div class="col">
           <div class="q-mb-xs text-caption text-grey-5">
@@ -91,10 +91,12 @@ export default {
   },
   methods: {
     editNews () {
-      this.$q.dialog({
-        component: AddNewsDialog,
-        news: this.news
-      })
+      this.$q
+        .dialog({
+          component: AddNewsDialog,
+          news: this.news
+        })
+        .onOk(news => this.$emit('edit', news))
     },
     deleteNews () {
       this.$q
