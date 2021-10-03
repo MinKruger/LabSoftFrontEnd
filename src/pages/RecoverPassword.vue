@@ -65,7 +65,7 @@ export default {
   components: { AuthCard },
   name: 'Login',
   data: () => ({
-    email: '',
+    code: '',
     user: { ...defaultUser },
     recoverLoading: false
   }),
@@ -75,7 +75,7 @@ export default {
         this.recoverLoading = true
         // TODO: ver rota correta no backend
         await this.$axios.post('recover-password', {
-          email: this.email,
+          code: this.code,
           ...this.user
         })
         this.$q.notify({
