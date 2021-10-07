@@ -35,19 +35,8 @@
 </template>
 
 <script>
-import { date } from 'quasar'
-import { validDate, noFutureDate, noPastDate } from 'src/utils/rules'
-
-const formatDateVal = val => {
-  if (typeof val !== 'string') return null
-
-  return /^\d{2}\/\d{2}\/\d{4}$/.test(val)
-    ? val
-      .split('/')
-      .reverse()
-      .join('-')
-    : val
-}
+// import { date } from 'quasar'
+// import { validDate, noFutureDate, noPastDate } from 'src/utils/rules'
 
 export default {
   name: 'DatePicker',
@@ -99,63 +88,53 @@ export default {
   computed: {
     val: {
       get () {
-        return typeof this.value === 'string' && !!this.value.trim()
-          ? this.value
-            .split('-')
-            .reverse()
-            .join('/')
-          : ''
+        return this.value
       },
       set (val) {
-        this.$emit(
-          'input',
-          val
-            .split('/')
-            .reverse()
-            .join('-')
-        )
+        this.$emit('input', val)
       }
     },
     getRules () {
-      const rules = [val => !val || validDate(formatDateVal(val))]
+      // const rules = [val => !val || validDate(formatDateVal(val))]
 
-      if (this.noFutureDate) {
-        rules.push(val => !val || noFutureDate(formatDateVal(val)))
-      }
+      // if (this.noFutureDate) {
+      //   rules.push(val => !val || noFutureDate(formatDateVal(val)))
+      // }
 
-      if (this.noPastDate) {
-        rules.push(val => !val || noPastDate(formatDateVal(val)))
-      }
+      // if (this.noPastDate) {
+      //   rules.push(val => !val || noPastDate(formatDateVal(val)))
+      // }
 
-      return [...this.rules, ...rules]
+      // return [...this.rules, ...rules]
+      return [...this.rules]
     }
   },
   methods: {
     setDate (timestamp) {
       if (timestamp === null) return
       try {
-        const timestampFormat = 'DD/MM/YYYY HH:mm:ss'
-        const currentDate = date
-          .buildDate({ hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
-          .getTime()
-        const selectedDate = date
-          .extractDate(`${timestamp} 00:00:00`, timestampFormat)
-          .getTime()
+        // const timestampFormat = 'DD/MM/YYYY HH:mm:ss'
+        // const currentDate = date
+        //   .buildDate({ hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
+        //   .getTime()
+        // const selectedDate = date
+        //   .extractDate(`${timestamp} 00:00:00`, timestampFormat)
+        //   .getTime()
 
-        if (this.noFutureDate && selectedDate > currentDate) {
-          return this.$q.notify({
-            color: 'grey-8',
-            textColor: 'white',
-            message: 'Não é possível selecionar uma data futura'
-          })
-        }
-        if (this.noPastDate && selectedDate < currentDate) {
-          return this.$q.notify({
-            color: 'grey-8',
-            textColor: 'white',
-            message: 'Não é possível selecionar uma data passada'
-          })
-        }
+        // if (this.noFutureDate && selectedDate > currentDate) {
+        //   return this.$q.notify({
+        //     color: 'grey-8',
+        //     textColor: 'white',
+        //     message: 'Não é possível selecionar uma data futura'
+        //   })
+        // }
+        // if (this.noPastDate && selectedDate < currentDate) {
+        //   return this.$q.notify({
+        //     color: 'grey-8',
+        //     textColor: 'white',
+        //     message: 'Não é possível selecionar uma data passada'
+        //   })
+        // }
         this.val = timestamp
         this.$refs.date.hide()
       } catch (err) {

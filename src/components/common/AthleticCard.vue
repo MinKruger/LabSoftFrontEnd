@@ -2,7 +2,7 @@
   <q-card class="athletic-card" flat>
     <img
       class="absolute-top sports-bg"
-      :src="`athletic_sports/${athletic.sport}.svg`"
+      :src="`athletic_sports/basketball.svg`"
       alt="Fundo Atlética"
     />
     <q-img
@@ -16,11 +16,11 @@
       :src="`athletic_logos/${athletic.logo}`"
       alt="Logo Atlética"
     />
-    <div :class="['ellipse', `ellipse-${athletic.color}`]" />
+    <div :class="['ellipse', 'ellipse-white']" />
     <div
       class="absolute-bottom text-center name text-accent text-h4 text-weight-bolder text-uppercase"
     >
-      {{ athletic.name }}
+      {{ athletic.nome }}
     </div>
   </q-card>
 </template>

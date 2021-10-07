@@ -4,9 +4,10 @@
       <template #after>
         <div class="row q-gutter-sm">
           <q-input
-            filled
+            v-model="search"
             label="Pesquise pelo nome, cor..."
             style="width: 300px"
+            filled
             dense
           >
             <template #prepend>
@@ -46,7 +47,7 @@
     </div>
     <div class="row q-col-gutter-sm">
       <div
-        v-for="athletic in athletics"
+        v-for="athletic in filteredAthletics"
         :key="athletic.id"
         class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
@@ -67,41 +68,15 @@ import AthleticCard from 'src/components/common/AthleticCard.vue'
 import { ATHLETICS } from 'src/constants/pages'
 import { sortOptions } from 'src/constants/athletics'
 import AddAthleticDialog from 'src/components/dialogs/AddAthleticDialog.vue'
+import { date } from 'quasar'
 
-const athletics = [
-  {
-    id: 1,
-    name: 'Milton Campos',
-    created_at: '2021-09-18',
-    color: 'white',
-    logo: 'logo1.png',
-    sport: 'basketball'
-  },
-  {
-    id: 2,
-    name: 'Medicina Claretiano',
-    created_at: '2021-09-18',
-    color: 'blue',
-    logo: 'logo2.png',
-    sport: 'basketball'
-  },
-  {
-    id: 3,
-    name: 'Atlética Primata',
-    created_at: '2021-09-18',
-    color: 'yellow',
-    logo: 'logo3.png',
-    sport: 'basketball'
-  },
-  {
-    id: 4,
-    name: 'Educação Física',
-    created_at: '2021-09-18',
-    color: 'orange',
-    logo: 'logo4.png',
-    sport: 'basketball'
-  }
-]
+const sortByOptions = {
+  Alfabética: (a, b) =>
+    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }),
+  'Data Criação': (a, b) =>
+    date.extractDate(a.data_criacao, 'DD/MM/YYYY') -
+    date.extractDate(b.data_criacao, 'DD/MM/YYYY')
+}
 
 export default {
   components: { PageHeader, AthleticCard },
@@ -113,16 +88,31 @@ export default {
     sortOptions,
     filterUniversity: null,
     universityOptions: ['UVV'],
+    search: '',
     // Atléticas
-    athletics
+    athletics: []
   }),
   async created () {
     await this.getAthletics()
   },
+  computed: {
+    filteredAthletics () {
+      let athletics = [...this.athletics]
+
+      if (this.search) {
+        athletics = athletics.filter(athletic =>
+          athletic.nome.includes(this.search)
+        )
+      }
+      if (this.sortBy) athletics.sort(sortByOptions[this.sortBy])
+
+      return athletics
+    }
+  },
   methods: {
     async getAthletics () {
-      const { data } = await this.$axios.get('atletica')
-      console.log(data)
+      const { data } = await this.$axios.get('atleticas')
+      this.athletics = data
     },
     openAddAthleticDialog (athletic) {
       this.$q
@@ -130,20 +120,12 @@ export default {
           component: AddAthleticDialog,
           athletic,
           onDelete: _athletic => {
-            console.log(_athletic)
             const index = this.athletics.findIndex(a => a.id === _athletic.id)
             if (index > -1) this.athletics.splice(index, 1)
           }
         })
-        .onOk(_athletic => {
-          if (_athletic.id) {
-            Object.assign(athletic, _athletic)
-          } else {
-            this.athletics.push({
-              ..._athletic,
-              id: this.athletics.length + 1
-            })
-          }
+        .onOk(async _athletic => {
+          await this.getAthletics()
         })
     }
   }

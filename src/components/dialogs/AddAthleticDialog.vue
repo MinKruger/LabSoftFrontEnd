@@ -17,7 +17,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Nome</p>
           <q-input
-            v-model="innerAthletic.name"
+            v-model="innerAthletic.nome"
             :rules="[required]"
             label="Nome"
             standout="bg-secondary"
@@ -37,7 +37,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Data de Criação</p>
           <date-picker
-            v-model="innerAthletic.created_at"
+            v-model="innerAthletic.data_criacao"
             :rules="[required]"
             label="Data de Criação"
             standout="bg-secondary"
@@ -76,10 +76,9 @@ import { ATHLETICS } from 'src/constants/pages'
 import { required, validDate } from 'src/utils/rules'
 
 const defaultAhletic = {
-  name: '',
+  nome: '',
   logo: null,
-  created_at: '',
-  sport: 'basketball'
+  data_criacao: ''
 }
 
 export default {
@@ -110,13 +109,29 @@ export default {
     onDialogHide () {
       this.$emit('hide')
     },
-    submit () {
-      console.log(this.innerAthletic)
-      this.$emit('ok', this.innerAthletic)
+    async submit () {
+      const athletic = this.innerAthletic.id
+        ? await this.updateAthletic(this.innerAthletic)
+        : await this.storeAthletic(this.innerAthletic)
+
+      this.$emit('ok', athletic)
       this.hide()
     },
     onCancelClick () {
       this.hide()
+    },
+    async storeAthletic (athletic) {
+      const { data } = await this.$axios.post('atleticas', athletic)
+
+      return data
+    },
+    async updateAthletic (athletic) {
+      const { data } = await this.$axios.put(
+        `atleticas/${athletic.id}`,
+        athletic
+      )
+
+      return data
     },
     deleteAthletic () {
       this.$q
@@ -135,7 +150,12 @@ export default {
             padding: 'sm md'
           }
         })
-        .onOk(() => {
+        .onOk(async () => {
+          await this.$axios.delete(`atleticas/${this.innerAthletic.id}`)
+          this.$q.notify({
+            type: 'positive',
+            message: 'Atlética excluída com sucesso.'
+          })
           this.onDelete && this.onDelete(this.innerAthletic)
           this.hide()
         })
