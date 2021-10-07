@@ -76,21 +76,23 @@ export default {
     categoryFilterOptions,
     intervalFilterBy: null,
     intervalFilterOptions,
-    news: [
-      {
-        id: 1,
-        posted_by: 'João Romalho',
-        title: 'Atléticas da UVV fazem parceria com atléticas da Ufes',
-        tags: 'Basquete, Masculino',
-        created_at: '2021-20-09',
-        photo:
-          'https://www.seculodiario.com.br/images/p/35250/UVV_Fachada_Divulgao.jpg',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio est, dignissim et arcu vel, semper pellentesque quam. Proin gravida, ante vel viverra auctor, ante leo varius ligula, nec viverra tellus augue at est. Etiam eget dolor lectus. Mauris dictum ligula non risus euismod, at tempus augue fermentum. Nunc leo velit, ornare id nibh sit amet, volutpat luctus velit. Aliquam non pulvinar nulla. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed eu velit tortor. Sed consequat placerat porttitor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce vulputate tellus in odio venenatis, malesuada volutpat nunc pulvinar. Maecenas mattis facilisis tortor, congue dictum tortor consectetur quis. Morbi arcu magna, placerat eu erat et, gravida ultricies quam. Phasellus mollis ligula libero, varius tincidunt nulla suscipit nec. Aenean eleifend metus metus, at eleifend massa volutpat ac. Aenean consectetur erat quis nunc maximus consequat. Aliquam cursus ante quam, eu condimentum risus iaculis vel.'
-      }
-    ]
+    news: []
   }),
+  async created () {
+    await this.getNews()
+  },
   methods: {
+    async getNews () {
+      const { data } = await this.$axios.get('postagens', {
+        params: {
+          limit: 1000,
+          page: 1,
+          type: 'Notícia'
+        }
+      })
+
+      this.news = data.posts
+    },
     openAddNewsDialog (selectedNews) {
       this.$q
         .dialog({
@@ -99,13 +101,8 @@ export default {
         })
         .onOk(news => this.onNewsSubmit(selectedNews, news))
     },
-    onNewsSubmit (selectedNews, news) {
-      console.log({ selectedNews, news })
-      if (news.id) {
-        Object.assign(selectedNews, news)
-      } else {
-        this.news.push(news)
-      }
+    async onNewsSubmit (selectedNews, news) {
+      await this.getNews()
     }
   }
 }
