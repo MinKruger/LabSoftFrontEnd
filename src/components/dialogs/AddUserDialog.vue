@@ -143,7 +143,6 @@ export default {
       this.$emit('hide')
     },
     submit () {
-      console.log(this.innerUser)
       this.$emit('ok', this.innerUser)
       this.hide()
     },

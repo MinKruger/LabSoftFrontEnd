@@ -100,7 +100,6 @@ export default {
         .onOk(news => this.onNewsSubmit(selectedNews, news))
     },
     onNewsSubmit (selectedNews, news) {
-      console.log({ selectedNews, news })
       if (news.id) {
         Object.assign(selectedNews, news)
       } else {
