@@ -40,25 +40,15 @@ export default {
   name: 'Users',
   data: () => ({
     headerInfo: USERS,
-    users: [
-      {
-        id: 1,
-        name: 'Nome Sobrenome',
-        email: 'emailqualquer@hotmail.com',
-        type: 'Tipo de permissão',
-        athletic: 'Nome da atlética',
-        permission: 'ADMIN',
-        picture: 'picture1.png'
-      }
-    ]
+    users: []
   }),
   async created () {
     await this.getUsers()
   },
   methods: {
     async getUsers () {
-      const { data } = await this.$axios.get('usuario')
-      console.log(data)
+      const { data } = await this.$axios.get('usuarios')
+      this.users = data
     },
     openAddUserDialog (user) {
       this.$q

@@ -2,22 +2,16 @@
   <q-card class="bg-user-card" flat>
     <div class="user-picture">
       <q-img
-        v-if="user.picture.includes('base64')"
+        v-if="user.foto.includes('base64')"
         class="picture"
-        :src="user.picture"
-      />
-      <q-img
-        v-else
-        class="picture"
-        :src="`user_pictures/${user.picture}`"
-        alt="Imagem do usuário"
+        :src="user.foto"
       />
     </div>
     <div class="user-name">
-        {{user.name}}
+        {{user.login}}
       </div>
       <div class="user-email">
-        {{user.email}}
+        {{user.login}}
       </div>
       <div class="user-data">
         <div class="user-item">
@@ -26,7 +20,7 @@
           </div>
 
           <p>
-            {{user.type}}
+            {{user.tipo}}
           </p>
         </div>
         <div class="user-item">
@@ -35,7 +29,7 @@
           </div>
 
           <p>
-            {{user.athletic}}
+            {{user.login}}
           </p>
         </div>
       </div>
@@ -75,6 +69,7 @@ export default {
 
   .user-picture {
     margin-bottom: 24px;
+    min-height: 103px;
   }
 
   .user-name {

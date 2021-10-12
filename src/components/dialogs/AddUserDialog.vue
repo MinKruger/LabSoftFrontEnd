@@ -29,7 +29,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Foto</p>
           <file-drag-drop
-            v-model="innerUser.picture"
+            v-model="innerUser.foto"
             :rules="[required]"
             hide-bottom-space
           />
@@ -37,7 +37,7 @@
          <q-card-section>
           <p class="text-subtitle2 text-uppercase">Email</p>
           <q-input
-            v-model="innerUser.email"
+            v-model="innerUser.login"
             :rules="[required]"
             placeholder="nome@email.com"
             standout="bg-secondary"
@@ -48,30 +48,42 @@
         </q-card-section>
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Tipo</p>
-         <select v-model="innerUser.type" class="userSelect">
-           <option disabled value="">Selecione</option>
-            <option>Tipo A</option>
-            <option>Tipo B</option>
-            <option>Tipo C</option>
-          </select>
+          <q-select
+            v-model="innerUser.tipo"
+            :rules="[required]"
+            :options="tipoOptions"
+            placeholder="Selecione"
+            standout="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
         </q-card-section>
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Permissão</p>
-          <select v-model="innerUser.permission" class="userSelect">
-            <option disabled value="">Selecione</option>
-            <option>Permissão A</option>
-            <option>Permissão B</option>
-            <option>Permissão C</option>
-          </select>
+          <q-select
+            v-model="innerUser.permissao"
+            :rules="[required]"
+            :options="tipoOptions"
+            placeholder="Selecione"
+            standout="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
         </q-card-section>
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Atlética</p>
-          <select v-model="innerUser.athletic" class="userSelect">
-            <option disabled value="">Selecione</option>
-            <option>Atletica A</option>
-            <option>Atletica B</option>
-            <option>Atletica C</option>
-          </select>
+          <q-select
+            v-model="innerUser.atletica"
+            :rules="[required]"
+            :options="tipoOptions"
+            placeholder="Selecione"
+            standout="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
         </q-card-section>
         <q-card-actions align="right" class="q-pa-md">
           <q-btn
@@ -85,7 +97,7 @@
           <q-btn
             type="submit"
             color="blue"
-            label="Adicionar"
+            :label="innerUser.id ? 'Salvar' : 'Adicionar'"
             padding="sm md"
             class="text-weight-bold"
           />
@@ -103,12 +115,11 @@ import { required } from 'src/utils/rules'
 
 const defaultUser = {
   id: '',
-  name: '',
-  picture: null,
-  email: '',
-  type: '',
-  permission: '',
-  athletic: ''
+  nome: '',
+  foto: null,
+  login: '',
+  tipo: '',
+  permissao: ''
 }
 
 export default {
@@ -122,7 +133,19 @@ export default {
     innerUser: { ...defaultUser },
     tipo: '',
     permissao: '',
-    atletica: ''
+    atletica: '',
+    tipoOptions: [
+      'Opção 1',
+      'Opção 2'
+    ],
+    permissaoOptions: [
+      'Opção 1',
+      'Opção 2'
+    ],
+    atleticaOptions: [
+      'Opção 1',
+      'Opção 2'
+    ]
   }),
   computed: {
     headerTitle () {
@@ -142,9 +165,33 @@ export default {
     onDialogHide () {
       this.$emit('hide')
     },
-    submit () {
-      this.$emit('ok', this.innerUser)
+    async submit () {
+      const payload = {
+        login: this.innerUser.login,
+        foto: this.innerUser.foto.includes('base64') ? this.innerUser.foto.split(',')[1] : '',
+        tipo: this.innerUser.tipo,
+        id: this.innerUser.id
+      }
+
+      const user = this.innerUser.id
+        ? await this.updateUser(payload)
+        : await this.storeUser(payload)
+
+      this.$emit('ok', user)
       this.hide()
+    },
+    async storeUser (user) {
+      const { data } = await this.$axios.post('usuarios', user)
+
+      return data
+    },
+    async updateUser (user) {
+      const { data } = await this.$axios.put(
+        `usuarios/${user.id}`,
+        user
+      )
+
+      return data
     },
     onCancelClick () {
       this.hide()
@@ -166,7 +213,12 @@ export default {
             padding: 'sm md'
           }
         })
-        .onOk(() => {
+        .onOk(async () => {
+          await this.$axios.delete(`usuarios/${this.innerUser.id}`)
+          this.$q.notify({
+            type: 'positive',
+            message: 'Atlética excluída com sucesso.'
+          })
           this.onDelete && this.onDelete(this.innerUser)
           this.hide()
         })
