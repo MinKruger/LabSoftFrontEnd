@@ -17,12 +17,14 @@
         </div>
       </template>
     </page-header>
-    <div
+    <div class="users-grid">
+      <div
         v-for="user in users"
         :key="user.id"
-        class="users-grid"
+        class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
       <user-card @click.native="openAddUserDialog(user)" :user="user" />
+      </div>
     </div>
   </q-page>
 </template>
@@ -45,30 +47,39 @@ export default {
         email: 'emailqualquer@hotmail.com',
         type: 'Tipo de permissão',
         athletic: 'Nome da atlética',
+        permission: 'ADMIN',
         picture: 'picture1.png'
       }
     ]
   }),
-  // async created () {
-  //   const { data } = await this.$axios.get('atletica')
-  //   this.users = data
-  // },
+  async created () {
+    await this.getUsers()
+  },
   methods: {
+    async getUsers () {
+      const { data } = await this.$axios.get('usuario')
+      console.log(data)
+    },
     openAddUserDialog (user) {
       this.$q
         .dialog({
           component: AddUserDialog,
-          user
+          user,
+          onDelete: _user => {
+            console.log(_user)
+            const index = this.users.findIndex(a => a.id === _user.id)
+            if (index > -1) this.users.splice(index, 1)
+          }
         })
-        .onOk(async _user => {
-          // if (_user.id) {
-          //   Object.assign(athletic, _user)
-          // } else {
-          //   this.athletics.push({
-          //     ..._user,
-          //     id: this.athletics.length + 1
-          //   })
-          // }
+        .onOk(_user => {
+          if (_user.id) {
+            Object.assign(user, _user)
+          } else {
+            this.users.push({
+              ..._user,
+              id: this.users.length + 1
+            })
+          }
         })
     }
   }
@@ -80,6 +91,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(209px, 1fr));
   gap: 16px;
+  padding-bottom: 20px;
 }
 
 </style>
