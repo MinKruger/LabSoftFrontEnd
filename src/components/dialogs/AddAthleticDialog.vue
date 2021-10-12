@@ -58,7 +58,7 @@
           <q-btn
             type="submit"
             color="blue"
-            label="Adicionar"
+            :label="innerAthletic.id ? 'Salvar' : 'Adicionar'"
             padding="sm md"
             class="text-weight-bold"
           />
