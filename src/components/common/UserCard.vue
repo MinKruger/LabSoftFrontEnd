@@ -57,6 +57,7 @@ export default {
 <style lang="scss">
 .bg-user-card {
   background: rgba($secondary, 0.5);
+  height: 100%;
   width: 100%;
   padding: 35px 20px;
   overflow: hidden;
@@ -107,6 +108,7 @@ export default {
 
     .user-item {
       color: $text2;
+      text-align: center;
 
       .icon {
         height: 24px;
@@ -125,6 +127,7 @@ export default {
         text-overflow: ellipsis;
         font-size: 12px;
         margin-top: 8px;
+        align-self: center;
       }
     }
   }
