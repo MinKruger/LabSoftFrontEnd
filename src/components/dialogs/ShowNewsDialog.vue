@@ -7,17 +7,17 @@
           class="text-h6 text-weight-bold absolute-bottom"
           style="background: none; z-index: 1"
         >
-          {{ news.title }}
+          {{ news.titulo }}
         </div>
         <div class="fit news-dialog-image-gradient" />
       </q-img>
       <q-card-section>
         <p class="text-grey-4 text-caption">
-          Postado por {{ news.posted_by }}
+          Postado por {{ news.id_usuario }}
           •
-          {{ newsCreatedAt }}
+          {{ newsEventDate }}
         </p>
-        <div v-html="news.content" />
+        <div v-html="news.descricao" />
       </q-card-section>
       <q-card-section v-if="tags.length > 0" class="row q-gutter-x-sm">
         <q-badge
@@ -66,14 +66,14 @@ export default {
     headerIcon: ATHLETICS.icon
   }),
   computed: {
-    newsCreatedAt () {
+    newsEventDate () {
       return date.formatDate(
-        date.extractDate(this.news.created_at, 'YYYY-MM-DD'),
+        date.extractDate(this.news.data_evento, 'DD/MM/YYYY'),
         'DD, MMMM [de] YYYY'
       )
     },
     tags () {
-      return this.news.tags.split(/\s*,\s*/)
+      return this.news.tags?.split(/\s*,\s*/) || []
     }
   },
   methods: {

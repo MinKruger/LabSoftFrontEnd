@@ -25,7 +25,8 @@
         style="width: 175px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
-        clearable
+        map-options
+        emit-value
         rounded
       />
       <q-select
@@ -35,19 +36,21 @@
         style="width: 200px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        map-options
+        emit-value
         clearable
         rounded
       />
     </div>
     <div class="row q-col-gutter-sm">
       <div
-        v-for="_news in news"
+        v-for="_news in filteredNews"
         :key="_news.id"
         class="col-12 col-sm-6 col-lg-4"
       >
         <news-card
           @edit="__news => onNewsSubmit(_news, __news)"
-          @click.native="openAddNewsDialog(_news)"
+          @click.native="openShowNewsDialog(_news)"
           class="cursor-pointer"
           :news="_news"
         />
@@ -64,48 +67,71 @@ import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 import { NEWS } from 'src/constants/pages'
 import {
   categoryFilterOptions,
-  intervalFilterOptions
+  intervalFilterOptions,
+  NEWS as NEWS_ENUM
 } from 'src/constants/news'
+import ShowNewsDialog from 'src/components/dialogs/ShowNewsDialog.vue'
+import { date } from 'quasar'
 
 export default {
   components: { PageHeader, NewsCard },
   name: 'News',
   data: () => ({
     headerInfo: NEWS,
-    categoryFilterBy: null,
+    categoryFilterBy: NEWS_ENUM,
     categoryFilterOptions,
     intervalFilterBy: null,
     intervalFilterOptions,
-    news: [
-      {
-        id: 1,
-        posted_by: 'João Romalho',
-        title: 'Atléticas da UVV fazem parceria com atléticas da Ufes',
-        tags: 'Basquete, Masculino',
-        created_at: '2021-20-09',
-        photo:
-          'https://www.seculodiario.com.br/images/p/35250/UVV_Fachada_Divulgao.jpg',
-        content:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec odio est, dignissim et arcu vel, semper pellentesque quam. Proin gravida, ante vel viverra auctor, ante leo varius ligula, nec viverra tellus augue at est. Etiam eget dolor lectus. Mauris dictum ligula non risus euismod, at tempus augue fermentum. Nunc leo velit, ornare id nibh sit amet, volutpat luctus velit. Aliquam non pulvinar nulla. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed eu velit tortor. Sed consequat placerat porttitor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce vulputate tellus in odio venenatis, malesuada volutpat nunc pulvinar. Maecenas mattis facilisis tortor, congue dictum tortor consectetur quis. Morbi arcu magna, placerat eu erat et, gravida ultricies quam. Phasellus mollis ligula libero, varius tincidunt nulla suscipit nec. Aenean eleifend metus metus, at eleifend massa volutpat ac. Aenean consectetur erat quis nunc maximus consequat. Aliquam cursus ante quam, eu condimentum risus iaculis vel.'
-      }
-    ]
+    news: []
   }),
+  computed: {
+    filteredNews () {
+      let news = [...this.news]
+
+      if (this.intervalFilterBy) {
+        const now = new Date()
+        news = news.filter(
+          _news =>
+            date.getDateDiff(now, new Date(_news.created_at), 'days') <=
+            this.intervalFilterBy
+        )
+      }
+
+      return news
+    }
+  },
+  async created () {
+    await this.getNews()
+  },
   methods: {
-    openAddNewsDialog (selectedNews) {
+    async getNews () {
+      const { data } = await this.$axios.get('postagens', {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+          page: 1,
+          type: this.categoryFilterBy
+        }
+      })
+
+      this.news = data.posts
+    },
+    openAddNewsDialog () {
       this.$q
         .dialog({
-          component: AddNewsDialog,
-          news: selectedNews
+          component: AddNewsDialog
         })
-        .onOk(news => this.onNewsSubmit(selectedNews, news))
+        .onOk(this.onNewsSubmit)
     },
-    onNewsSubmit (selectedNews, news) {
-      console.log({ selectedNews, news })
-      if (news.id) {
-        Object.assign(selectedNews, news)
-      } else {
-        this.news.push(news)
-      }
+    openShowNewsDialog (selectedNews) {
+      this.$q.dialog({ component: ShowNewsDialog, news: selectedNews })
+    },
+    async onNewsSubmit (selectedNews, news) {
+      await this.getNews()
+    }
+  },
+  watch: {
+    async categoryFilterBy () {
+      await this.getNews()
     }
   }
 }

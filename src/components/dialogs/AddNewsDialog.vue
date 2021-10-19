@@ -8,7 +8,7 @@
         />
         <q-card-section>
           <form-field
-            v-model="innerNews.title"
+            v-model="innerNews.titulo"
             label="Título"
             :rules="[required]"
           />
@@ -16,7 +16,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase text-weight-bold">Foto</p>
           <file-drag-drop
-            v-model="innerNews.photo"
+            v-model="innerNews.imagem"
             :rules="[required]"
             hide-bottom-space
           />
@@ -24,7 +24,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase text-weight-bold">Texto</p>
           <q-editor
-            v-model="innerNews.content"
+            v-model="innerNews.descricao"
             content-class="bg-secondary"
             toolbar-text-color="white"
             toolbar-toggle-color="accent"
@@ -64,10 +64,13 @@ import { ATHLETICS } from 'src/constants/pages'
 import { required } from 'src/utils/rules'
 
 const defaultNews = {
-  title: '',
-  photo: '',
-  content: '',
-  tags: ''
+  titulo: '',
+  id_usuario: '00000000-0000-0000-0000-000000000000',
+  imagem: '',
+  descricao: '',
+  tags: '',
+  tipo: 'NOTICIAS',
+  data_evento: new Date().toLocaleDateString('pt-BR')
 }
 
 export default {
@@ -94,15 +97,26 @@ export default {
     onDialogHide () {
       this.$emit('hide')
     },
-    submit () {
-      this.$emit('ok', this.innerNews)
+    async submit () {
+      const news = this.innerNews.id
+        ? await this.updateNews(this.innerNews)
+        : await this.storeNews(this.innerNews)
+
+      this.$emit('ok', news)
       this.hide()
     },
     onCancelClick () {
       this.hide()
     },
-    editNews () {
-      //
+    async storeNews (news) {
+      const { data } = await this.$axios.post('postagens', news)
+
+      return data
+    },
+    async updateNews (news) {
+      const { data } = await this.$axios.put(`postagens/${news.id}`, news)
+
+      return data
     },
     // Rules
     required
