@@ -17,7 +17,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Nome</p>
           <q-input
-            v-model="innerUser.name"
+            v-model="innerUser.nome"
             :rules="[required]"
             placeholder="Nome"
             standout="bg-secondary"
@@ -30,29 +30,15 @@
           <p class="text-subtitle2 text-uppercase">Foto</p>
           <file-drag-drop
             v-model="innerUser.foto"
-            :rules="[required]"
             hide-bottom-space
           />
         </q-card-section>
          <q-card-section>
           <p class="text-subtitle2 text-uppercase">Email</p>
           <q-input
-            v-model="innerUser.login"
+            v-model="innerUser.email"
             :rules="[required]"
             placeholder="nome@email.com"
-            standout="bg-secondary"
-            hide-bottom-space
-            outlined
-            dense
-          />
-        </q-card-section>
-        <q-card-section>
-          <p class="text-subtitle2 text-uppercase">Tipo</p>
-          <q-select
-            v-model="innerUser.tipo"
-            :rules="[required]"
-            :options="tipoOptions"
-            placeholder="Selecione"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -64,7 +50,7 @@
           <q-select
             v-model="innerUser.permissao"
             :rules="[required]"
-            :options="tipoOptions"
+            :options="permissaoOptions"
             placeholder="Selecione"
             standout="bg-secondary"
             hide-bottom-space
@@ -75,10 +61,21 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Atlética</p>
           <q-select
-            v-model="innerUser.atletica"
+            v-model="innerUser.id_atletica"
             :rules="[required]"
-            :options="tipoOptions"
+            :options="atleticaOptions"
             placeholder="Selecione"
+            standout="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
+        </q-card-section>
+        <q-card-section>
+          <p class="text-subtitle2 text-uppercase">Instagram</p>
+          <q-input
+            v-model="innerUser.instagram"
+            placeholder="Instagram"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -117,43 +114,51 @@ const defaultUser = {
   id: '',
   nome: '',
   foto: null,
-  login: '',
-  tipo: '',
-  permissao: ''
+  email: '',
+  permissao: '',
+  id_atletica: '',
+  instagram: ''
 }
 
 export default {
   components: { DialogHeader, FileDragDrop },
   props: {
     user: Object,
+    athletics: Array,
     onDelete: Function
   },
   data: () => ({
     headerIcon: USERS.icon,
     innerUser: { ...defaultUser },
-    tipo: '',
     permissao: '',
-    atletica: '',
-    tipoOptions: [
-      'Opção 1',
-      'Opção 2'
-    ],
+    id_atletica: '',
     permissaoOptions: [
-      'Opção 1',
-      'Opção 2'
-    ],
-    atleticaOptions: [
-      'Opção 1',
-      'Opção 2'
+      'dce1',
+      'dce2',
+      'dce3',
+      'atletica'
     ]
   }),
   computed: {
     headerTitle () {
       return this.innerUser.id ? 'Editar Usuário' : 'Novo Usuário'
+    },
+    atleticaOptions () {
+      return this.athletics.map(e => {
+        return {
+          label: e.nome,
+          value: e.id,
+          description: e.nome
+        }
+      })
     }
   },
   created () {
-    if (this.user) Object.assign(this.innerUser, this.user)
+    if (this.user) {
+      Object.assign(this.innerUser, this.user)
+
+      this.innerUser.id_atletica = this.atleticaOptions.find(e => e.value === this.innerUser.id_atletica)
+    }
   },
   methods: {
     show () {
@@ -167,14 +172,16 @@ export default {
     },
     async submit () {
       const payload = {
-        login: this.innerUser.login,
-        foto: this.innerUser.foto.includes('base64') ? this.innerUser.foto.split(',')[1] : '',
-        tipo: this.innerUser.tipo,
-        id: this.innerUser.id
+        nome: this.innerUser.nome,
+        email: this.innerUser.email,
+        foto: this.innerUser?.foto?.includes('base64') ? this.innerUser.foto.split(',')[1] : '',
+        permissao: this.innerUser.permissao,
+        id_atletica: this.innerUser.id_atletica.value,
+        instagram: this.innerUser.instagram
       }
 
       const user = this.innerUser.id
-        ? await this.updateUser(payload)
+        ? await this.updateUser({ payload, id: this.innerUser.id })
         : await this.storeUser(payload)
 
       this.$emit('ok', user)
@@ -185,10 +192,10 @@ export default {
 
       return data
     },
-    async updateUser (user) {
+    async updateUser ({ payload, id }) {
       const { data } = await this.$axios.put(
-        `usuarios/${user.id}`,
-        user
+        `usuarios/${id}`,
+        payload
       )
 
       return data

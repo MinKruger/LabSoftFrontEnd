@@ -110,6 +110,7 @@ export default {
 
   &:hover {
     transform: scale(1.1);
+    z-index: 1;
     .name {
       span {
         background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;

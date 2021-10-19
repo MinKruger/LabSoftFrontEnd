@@ -2,16 +2,16 @@
   <q-card class="bg-user-card" flat>
     <div class="user-picture">
       <q-img
-        v-if="user.foto.includes('base64')"
+        v-if="user && user.foto && user.foto.includes('base64')"
         class="picture"
         :src="user.foto"
       />
     </div>
     <div class="user-name">
-        {{user.login}}
+        {{user.nome}}
       </div>
       <div class="user-email">
-        {{user.login}}
+        {{user.email}}
       </div>
       <div class="user-data">
         <div class="user-item">
@@ -20,7 +20,7 @@
           </div>
 
           <p>
-            {{user.tipo}}
+            {{user.permissao}}
           </p>
         </div>
         <div class="user-item">
@@ -29,7 +29,7 @@
           </div>
 
           <p>
-            {{user.login}}
+            {{ athleticName }}
           </p>
         </div>
       </div>
@@ -40,9 +40,15 @@
 export default {
   name: 'UserCard',
   props: {
+    athletics: Array,
     user: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    athleticName () {
+      return this.athletics.find(e => e.id === this.user.id_atletica)?.nome || ''
     }
   }
 }

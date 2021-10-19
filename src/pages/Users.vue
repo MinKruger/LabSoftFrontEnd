@@ -3,7 +3,7 @@
     <page-header v-bind="headerInfo">
       <template #after>
         <div class="row q-gutter-sm">
-          <q-input filled label="Pesquise pelo nome" style="width: 300px" dense>
+          <q-input filled v-model="search" label="Pesquise pelo nome" style="width: 300px" dense>
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -19,11 +19,11 @@
     </page-header>
     <div class="users-grid">
       <div
-        v-for="user in users"
+        v-for="user in filteredUsers"
         :key="user.id"
         class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
-      <user-card @click.native="openAddUserDialog(user)" :user="user" />
+      <user-card @click.native="openAddUserDialog(user)" :user="user" :athletics="athletics" />
       </div>
     </div>
   </q-page>
@@ -40,36 +40,49 @@ export default {
   name: 'Users',
   data: () => ({
     headerInfo: USERS,
-    users: []
+    users: [],
+    athletics: [],
+    search: ''
   }),
   async created () {
+    await this.getAthletics()
     await this.getUsers()
+  },
+  computed: {
+    filteredUsers () {
+      let users = [...this.users]
+
+      if (this.search) {
+        users = users.filter(athletic =>
+          athletic.nome.includes(this.search)
+        )
+      }
+
+      return users
+    }
   },
   methods: {
     async getUsers () {
       const { data } = await this.$axios.get('usuarios')
-      this.users = data
+      this.users = data.filter(e => e.permissao !== 'aluno')
+    },
+    async getAthletics () {
+      const { data } = await this.$axios.get('atleticas')
+      this.athletics = data
     },
     openAddUserDialog (user) {
       this.$q
         .dialog({
           component: AddUserDialog,
           user,
+          athletics: this.athletics,
           onDelete: _user => {
-            console.log(_user)
             const index = this.users.findIndex(a => a.id === _user.id)
             if (index > -1) this.users.splice(index, 1)
           }
         })
-        .onOk(_user => {
-          if (_user.id) {
-            Object.assign(user, _user)
-          } else {
-            this.users.push({
-              ..._user,
-              id: this.users.length + 1
-            })
-          }
+        .onOk(async _user => {
+          await this.getUsers()
         })
     }
   }
