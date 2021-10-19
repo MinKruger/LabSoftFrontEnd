@@ -1,7 +1,15 @@
-export const categoryFilterOptions = Object.freeze([])
+export const NEWS = 'NOTICIAS'
+export const EVENTS = 'EVENTOS'
+export const MATCHES = 'JOGOS'
+
+export const categoryFilterOptions = Object.freeze([
+  { label: 'Notícias', value: NEWS },
+  { label: 'Eventos', value: EVENTS },
+  { label: 'Jogos', value: MATCHES }
+])
 export const intervalFilterOptions = Object.freeze([
-  'Últimos 7 dias',
-  'Últimos 30 dias'
+  { label: 'Últimos 7 dias', value: 7 },
+  { label: 'Últimos 30 dias', value: 30 }
 ])
 export const tagsColors = Object.freeze({
   Basquete: 'blue',
