@@ -65,12 +65,12 @@ import { required } from 'src/utils/rules'
 
 const defaultNews = {
   titulo: '',
-  id_usuario: 1,
+  id_usuario: '00000000-0000-0000-0000-000000000000',
   imagem: '',
   descricao: '',
   tags: '',
-  tipo: 'Notícia',
-  data: new Date().toLocaleDateString('pt-BR')
+  tipo: 'NOTICIAS',
+  data_evento: new Date().toLocaleDateString('pt-BR')
 }
 
 export default {
@@ -114,7 +114,7 @@ export default {
       return data
     },
     async updateNews (news) {
-      const { data } = await this.$axios.put(`atleticas/${news.id}`, news)
+      const { data } = await this.$axios.put(`postagens/${news.id}`, news)
 
       return data
     },

@@ -25,7 +25,8 @@
         style="width: 175px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
-        clearable
+        map-options
+        emit-value
         rounded
       />
       <q-select
@@ -35,19 +36,21 @@
         style="width: 200px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        map-options
+        emit-value
         clearable
         rounded
       />
     </div>
     <div class="row q-col-gutter-sm">
       <div
-        v-for="_news in news"
+        v-for="_news in filteredNews"
         :key="_news.id"
         class="col-12 col-sm-6 col-lg-4"
       >
         <news-card
           @edit="__news => onNewsSubmit(_news, __news)"
-          @click.native="openAddNewsDialog(_news)"
+          @click.native="openShowNewsDialog(_news)"
           class="cursor-pointer"
           :news="_news"
         />
@@ -64,20 +67,39 @@ import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 import { NEWS } from 'src/constants/pages'
 import {
   categoryFilterOptions,
-  intervalFilterOptions
+  intervalFilterOptions,
+  NEWS as NEWS_ENUM
 } from 'src/constants/news'
+import ShowNewsDialog from 'src/components/dialogs/ShowNewsDialog.vue'
+import { date } from 'quasar'
 
 export default {
   components: { PageHeader, NewsCard },
   name: 'News',
   data: () => ({
     headerInfo: NEWS,
-    categoryFilterBy: null,
+    categoryFilterBy: NEWS_ENUM,
     categoryFilterOptions,
     intervalFilterBy: null,
     intervalFilterOptions,
     news: []
   }),
+  computed: {
+    filteredNews () {
+      let news = [...this.news]
+
+      if (this.intervalFilterBy) {
+        const now = new Date()
+        news = news.filter(
+          _news =>
+            date.getDateDiff(now, new Date(_news.created_at), 'days') <=
+            this.intervalFilterBy
+        )
+      }
+
+      return news
+    }
+  },
   async created () {
     await this.getNews()
   },
@@ -85,23 +107,30 @@ export default {
     async getNews () {
       const { data } = await this.$axios.get('postagens', {
         params: {
-          limit: 1000,
+          limit: Number.MAX_SAFE_INTEGER,
           page: 1,
-          type: 'Notícia'
+          type: this.categoryFilterBy
         }
       })
 
       this.news = data.posts
     },
-    openAddNewsDialog (selectedNews) {
+    openAddNewsDialog () {
       this.$q
         .dialog({
-          component: AddNewsDialog,
-          news: selectedNews
+          component: AddNewsDialog
         })
-        .onOk(news => this.onNewsSubmit(selectedNews, news))
+        .onOk(this.onNewsSubmit)
+    },
+    openShowNewsDialog (selectedNews) {
+      this.$q.dialog({ component: ShowNewsDialog, news: selectedNews })
     },
     async onNewsSubmit (selectedNews, news) {
+      await this.getNews()
+    }
+  },
+  watch: {
+    async categoryFilterBy () {
       await this.getNews()
     }
   }

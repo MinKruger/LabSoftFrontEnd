@@ -3,7 +3,7 @@
     <q-img
       width="150px"
       height="150px"
-      :src="news.photo"
+      :src="news.imagem"
       style="min-width: 150px"
     >
       <div class="fit news-card-image-gradient" />
@@ -12,10 +12,10 @@
       <div class="row">
         <div class="col">
           <div class="q-mb-xs text-caption text-grey-5">
-            Postado por {{ news.posted_by }}
+            Postado por {{ news.id_usuario }}
           </div>
           <p class="text-body1 text-weight-bold ellipsis-2-lines">
-            {{ news.title }}
+            {{ news.titulo }}
           </p>
           <q-card-section v-if="tags.length > 0" class="row q-gutter-sm">
             <q-badge
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5">
-        {{ newsCreatedAt }}
+        {{ newsEventDate }}
       </div>
     </div>
   </q-card>
@@ -79,14 +79,14 @@ export default {
     }
   },
   computed: {
-    newsCreatedAt () {
+    newsEventDate () {
       return date.formatDate(
-        date.extractDate(this.news.created_at, 'YYYY-MM-DD'),
+        date.extractDate(this.news.data_evento, 'DD/MM/YYYY'),
         'DD, MMMM [de] YYYY'
       )
     },
     tags () {
-      return this.news.tags.split(/\s*,\s*/)
+      return this.news.tags?.split(/\s*,\s*/) || []
     }
   },
   methods: {
