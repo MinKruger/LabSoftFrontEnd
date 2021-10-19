@@ -20,6 +20,12 @@ export const handleErrors = async (
   }
 
   const defaultErrorHandlers = {
+    400: data => {
+      Vue.prototype.$q.notify({
+        type: 'alert',
+        message: data.message
+      })
+    },
     401: async (/* data */) => {
       await store.dispatch('auth/logout')
 

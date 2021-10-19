@@ -7,14 +7,14 @@
         </q-card-section>
         <q-card-section class="q-gutter-y-md">
           <form-field
-            v-model="user.email"
+            v-model="user.login"
             label="E-mail"
             placeholder="email@email.com"
             type="email"
             :rules="[required, validEmail]"
           />
           <form-field
-            v-model="user.password"
+            v-model="user.senha"
             label="Senha"
             placeholder="********"
             type="password"
@@ -49,8 +49,8 @@ import AuthCard from 'components/common/AuthCard.vue'
 import { required, validEmail } from 'src/utils/rules'
 
 const defaultUser = {
-  email: '',
-  password: ''
+  login: '',
+  senha: ''
 }
 
 export default {
@@ -69,6 +69,7 @@ export default {
           type: 'positive',
           message: 'Login realizado com sucesso'
         })
+        await this.$router.push({ name: 'Home' })
       } finally {
         this.loginLoading = false
       }
