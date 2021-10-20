@@ -98,9 +98,15 @@ export default {
       this.$emit('hide')
     },
     async submit () {
+      const innerNews = {
+        ...this.innerNews,
+        imagem: this.innerNews.imagem.startsWith('data:')
+          ? this.innerNews.imagem.replace(/^data:.+;base64,/, '')
+          : this.innerNews.imagem
+      }
       const news = this.innerNews.id
-        ? await this.updateNews(this.innerNews)
-        : await this.storeNews(this.innerNews)
+        ? await this.updateNews(innerNews)
+        : await this.storeNews(innerNews)
 
       this.$emit('ok', news)
       this.hide()

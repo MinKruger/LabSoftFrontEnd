@@ -10,13 +10,17 @@
       class="absolute-center logo"
       :src="`http://${athletic.logo}`"
     />
+    <q-img
+      v-else
+      class="absolute-center logo"
+      :src="`athletic_logos/${athletic.logo}`"
+      alt="Logo Atlética"
+    />
     <div :class="['ellipse', 'ellipse-white']" />
     <div
       class="absolute-bottom text-center name text-accent text-h4 text-weight-bolder text-uppercase"
     >
-    <span>
       {{ athletic.nome }}
-    </span>
     </div>
   </q-card>
 </template>

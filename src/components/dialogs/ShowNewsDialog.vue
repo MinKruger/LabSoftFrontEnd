@@ -73,7 +73,7 @@ export default {
       )
     },
     tags () {
-      return this.news.tags?.split(/\s*,\s*/) || []
+      return this.news.tags?.split(/\s?,\s?/) || []
     }
   },
   methods: {
