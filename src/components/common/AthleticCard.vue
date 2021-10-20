@@ -53,6 +53,7 @@ export default {
 
   .logo {
     width: 80%;
+    z-index: 1;
   }
 
   .ellipse {

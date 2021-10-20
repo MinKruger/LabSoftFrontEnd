@@ -110,6 +110,8 @@ export default {
       this.$emit('hide')
     },
     async submit () {
+      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64') ? this.innerAthletic.logo.split(',')[1] : ''
+
       const athletic = this.innerAthletic.id
         ? await this.updateAthletic(this.innerAthletic)
         : await this.storeAthletic(this.innerAthletic)
