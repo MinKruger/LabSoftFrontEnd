@@ -117,17 +117,15 @@ export default {
     transform: scale(1.1);
     z-index: 1;
     .name {
-      span {
-        background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
-        -webkit-background-clip: text;
-        background-clip: text;
+      background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
+      -webkit-background-clip: text;
+      background-clip: text;
 
-        -webkit-text-fill-color: transparent;
-        animation: aitf 80s linear infinite;
+      -webkit-text-fill-color: transparent;
+      animation: aitf 80s linear infinite;
 
-        transform: translate3d(0,0,0);
-        backface-visibility: hidden;
-      }
+      transform: translate3d(0,0,0);
+      backface-visibility: hidden;
     }
   }
 }
