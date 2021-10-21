@@ -37,7 +37,6 @@ body.body--dark {
   border-color: rgba(255, 255, 255, 0.0);
 }
 
-.q-field--dense .q-field__control, .q-field--dense .q-field__marginal {
-  height: 40px;
-  background-color: #24243d;
+.q-field .q-field__control {
+  background-color: $secondary;
 }

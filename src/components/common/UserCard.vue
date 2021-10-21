@@ -2,9 +2,9 @@
   <q-card class="bg-user-card" flat>
     <div class="user-picture">
       <q-img
-        v-if="user && user.foto && user.foto.includes('base64')"
+        v-if="user && user.foto"
         class="picture"
-        :src="user.foto"
+        :src="`http://178.238.233.159:5555${user.foto}`"
       />
     </div>
     <div class="user-name">
@@ -63,6 +63,12 @@ export default {
   overflow: hidden;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s all ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 1;
+  }
 
   .picture {
     display: block;

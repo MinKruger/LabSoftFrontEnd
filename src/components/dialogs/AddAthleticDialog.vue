@@ -19,7 +19,7 @@
           <q-input
             v-model="innerAthletic.nome"
             :rules="[required]"
-            label="Nome"
+            placeholder="Nome"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -39,7 +39,7 @@
           <date-picker
             v-model="innerAthletic.data_criacao"
             :rules="[required]"
-            label="Data de Criação"
+            placeholder="Data de Criação"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -110,7 +110,7 @@ export default {
       this.$emit('hide')
     },
     async submit () {
-      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64') ? this.innerAthletic.logo.split(',')[1] : ''
+      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64') ? this.innerAthletic.logo.split(',')[1] : this.innerAthletic.logo
 
       const athletic = this.innerAthletic.id
         ? await this.updateAthletic(this.innerAthletic)

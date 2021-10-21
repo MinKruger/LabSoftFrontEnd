@@ -48,6 +48,7 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Permissão</p>
           <q-select
+            @input="innerUser.id_atletica = ''"
             v-model="innerUser.permissao"
             :rules="[required]"
             :options="permissaoOptions"
@@ -58,7 +59,7 @@
             dense
           />
         </q-card-section>
-        <q-card-section>
+        <q-card-section v-if="innerUser.permissao === 'atletica'">
           <p class="text-subtitle2 text-uppercase">Atlética</p>
           <q-select
             v-model="innerUser.id_atletica"
@@ -174,9 +175,9 @@ export default {
       const payload = {
         nome: this.innerUser.nome,
         email: this.innerUser.email,
-        foto: this.innerUser?.foto?.includes('base64') ? this.innerUser.foto.split(',')[1] : '',
+        foto: this.innerUser?.foto?.includes('base64') ? this.innerUser.foto.split(',')[1] : this.innerUser.foto,
         permissao: this.innerUser.permissao,
-        id_atletica: this.innerUser.id_atletica.value,
+        id_atletica: this.innerUser?.id_atletica?.value ? this.innerUser?.id_atletica?.value : '',
         instagram: this.innerUser.instagram
       }
 

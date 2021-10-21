@@ -17,8 +17,6 @@ export async function attemptLogin ({ commit }, userCredentials) {
     }
   )
 
-  console.log(data)
-
   localStorage.setItem('access_token', data.token)
 
   // commit('setUser', data.user)

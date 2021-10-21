@@ -104,6 +104,8 @@ export default {
           ? this.innerNews.imagem.replace(/^data:.+;base64,/, '')
           : this.innerNews.imagem
       }
+
+      innerNews.id_usuario = '60549bff-e038-46f3-9192-0a658441ace3'
       const news = this.innerNews.id
         ? await this.updateNews(innerNews)
         : await this.storeNews(innerNews)
