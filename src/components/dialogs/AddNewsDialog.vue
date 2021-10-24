@@ -6,22 +6,41 @@
           :icon="headerIcon"
           :title="innerNews.id ? 'Editar Postagem' : 'Nova Postagem'"
         />
-        <q-card-section>
-          <p class="text-subtitle2 text-uppercase text-weight-bold">Tipo</p>
-          <q-select
-            v-model="innerNews.tipo"
-            :options="categoryOptions"
-            map-options
-            emit-value
-            standout="bg-secondary"
-            class="bg-secondary"
-            input-class="form-input"
-            popup-content-class="bg-secondary"
-            hide-bottom-space
-            outlined
-            dense
-          />
-        </q-card-section>
+        <div class="row">
+          <q-card-section class="col-12 col-sm-6">
+            <p class="text-subtitle2 text-uppercase text-weight-bold">Tipo</p>
+            <q-select
+              v-model="innerNews.tipo"
+              :options="categoryOptions"
+              map-options
+              emit-value
+              class="bg-secondary"
+              input-class="form-input"
+              popup-content-class="bg-secondary"
+              hide-bottom-space
+              outlined
+              dense
+            />
+          </q-card-section>
+          <q-card-section
+            class="col-12 col-sm-6"
+            style="padding-top: 16px !important"
+          >
+            <p class="text-subtitle2 text-uppercase text-weight-bold">
+              Data Evento
+            </p>
+            <date-picker
+              v-model="innerNews.data_evento"
+              :rules="[required]"
+              label="Data Evento"
+              class="bg-secondary"
+              standout="bg-secondary"
+              hide-bottom-space
+              outlined
+              dense
+            />
+          </q-card-section>
+        </div>
         <q-card-section>
           <form-field
             v-model="innerNews.titulo"
@@ -76,6 +95,7 @@
 <script>
 import DialogHeader from 'components/common/DialogHeader.vue'
 import FileDragDrop from 'components/common/FileDragDrop.vue'
+import DatePicker from 'components/common/DatePicker.vue'
 import { ATHLETICS } from 'src/constants/pages'
 import { categoryOptions } from 'src/constants/news'
 import { required } from 'src/utils/rules'
@@ -91,7 +111,7 @@ const defaultNews = {
 }
 
 export default {
-  components: { DialogHeader, FileDragDrop },
+  components: { DialogHeader, FileDragDrop, DatePicker },
   props: {
     news: Object
   },
