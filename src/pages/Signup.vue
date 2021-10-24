@@ -6,12 +6,24 @@
           <q-img src="logo.png" width="50%" />
         </q-card-section>
         <q-card-section class="q-gutter-y-md">
+          <profile-picture-upload v-model="user.foto" />
           <form-field
-            v-model="user.login"
+            v-model="user.email"
             label="E-mail"
             placeholder="email@email.com"
             type="email"
             :rules="[required, validEmail]"
+          />
+          <form-field
+            v-model="user.nome"
+            label="Nome"
+            placeholder="Fulano"
+            :rules="[required]"
+          />
+          <form-field
+            v-model="user.instagram"
+            label="Instagram"
+            placeholder="@fulano"
           />
           <form-field
             v-model="user.senha"
@@ -25,23 +37,15 @@
           <q-btn
             type="submit"
             color="blue"
-            label="Fazer Login"
+            label="Registrar-se"
             padding="sm xl"
             class="text-weight-bold"
             :loading="loginLoading"
           />
           <q-btn
-            :to="{ name: 'ForgotPassword' }"
+            :to="{ name: 'Login' }"
             color="white"
-            label="Esqueci a Senha"
-            padding="sm md"
-            class="text-weight-bold"
-            flat
-          />
-          <q-btn
-            :to="{ name: 'Signup' }"
-            color="white"
-            label="Registrar-se"
+            label="Voltar ao Login"
             padding="sm md"
             class="text-weight-bold"
             flat
@@ -55,14 +59,18 @@
 <script>
 import AuthCard from 'components/common/AuthCard.vue'
 import { required, validEmail } from 'src/utils/rules'
+import ProfilePictureUpload from 'src/components/common/ProfilePictureUpload.vue'
 
 const defaultUser = {
-  login: '',
-  senha: ''
+  email: '',
+  senha: '',
+  nome: '',
+  foto: '',
+  instagram: ''
 }
 
 export default {
-  components: { AuthCard },
+  components: { AuthCard, ProfilePictureUpload },
   name: 'Login',
   data: () => ({
     user: { ...defaultUser },
@@ -72,12 +80,21 @@ export default {
     async attemptLogin () {
       try {
         this.loginLoading = true
-        await this.$store.dispatch('auth/attemptLogin', this.user)
+        const user = {
+          ...this.user,
+          foto: this.user.foto
+            ? this.user.foto.replace(/^data:.+;base64,/, '')
+            : null
+        }
+
+        const { data } = await this.$axios.post('auth/register', user)
+        localStorage.setItem('access_token', data.token)
+
         this.$q.notify({
           type: 'positive',
-          message: 'Login realizado com sucesso'
+          message: 'Registro realizado com sucesso'
         })
-        await this.$router.push({ name: 'Home' })
+        await this.$router.push({ name: 'Login' })
       } finally {
         this.loginLoading = false
       }
