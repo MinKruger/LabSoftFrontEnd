@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import AddChampionshipDialog from '../dialogs/AddChampionshipDialog.vue'
 export default {
   name: 'ChampionshipCard',
   props: {
@@ -69,10 +70,33 @@ export default {
   },
   methods: {
     editChampionship () {
-      //
+      this.$q
+        .dialog({
+          component: AddChampionshipDialog,
+          championship: this.championship
+        })
+        .onOk(championship => this.$emit('edit', championship))
     },
     deleteChampionship () {
-      //
+      this.$q
+        .dialog({
+          title: 'Excluir Campeonato',
+          message: 'Deseja realmente excluir este campeonato?',
+          class: 'bg-primary',
+          ok: {
+            label: 'Excluir',
+            color: 'blue',
+            padding: 'sm md'
+          },
+          cancel: {
+            color: 'white',
+            outline: true,
+            padding: 'sm md'
+          }
+        })
+        .onOk(() => {
+          this.$emit('delete', this.news)
+        })
     }
   }
 }

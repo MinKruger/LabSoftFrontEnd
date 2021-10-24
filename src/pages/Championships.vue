@@ -36,7 +36,7 @@
       />
       <q-select
         label="Modalidade"
-        v-model="filterModality"
+        v-model="modalityFilterBy"
         :options="modalityOptions"
         style="width: 175px"
         standout="bg-secondary"
@@ -52,6 +52,7 @@
         class="col-12 col-sm-6 col-lg-4"
       >
         <championship-card
+          @edit="championship => openAddChampionshipDialog(championship)"
           @click.native="openShowChampionshipDialog(championship)"
           class="cursor-pointer"
           :championship="championship"
@@ -98,9 +99,10 @@ export default {
     }
   },
   methods: {
-    openAddChampionshipDialog () {
+    openAddChampionshipDialog (selectedChampionship) {
       this.$q.dialog({
-        component: AddChampionshipDialog
+        component: AddChampionshipDialog,
+        championship: selectedChampionship
       })
     },
     openShowChampionshipDialog (selectedChampionship) {

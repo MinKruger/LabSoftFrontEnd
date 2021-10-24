@@ -91,7 +91,7 @@ const defaultChampionship = {
 export default {
   components: { DialogHeader },
   props: {
-    athletic: Object,
+    championship: Object,
     onDelete: Function
   },
   data: () => ({
@@ -101,7 +101,7 @@ export default {
   }),
   computed: {
     headerTitle () {
-      return this.innerChampionship.id ? 'Editar Atlética' : 'Nova Atlética'
+      return this.innerChampionship.id ? 'Editar Campeonato' : 'Nova Campeonato'
     }
   },
   created () {
