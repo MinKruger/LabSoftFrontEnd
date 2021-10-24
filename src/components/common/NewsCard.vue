@@ -1,6 +1,7 @@
 <template>
   <q-card class="row no-wrap bg-secondary" flat>
     <q-img
+      v-if="news.imagem"
       width="150px"
       height="150px"
       :src="newsImage"
