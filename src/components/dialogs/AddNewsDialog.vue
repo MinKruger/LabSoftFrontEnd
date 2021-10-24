@@ -7,6 +7,22 @@
           :title="innerNews.id ? 'Editar Postagem' : 'Nova Postagem'"
         />
         <q-card-section>
+          <p class="text-subtitle2 text-uppercase text-weight-bold">Tipo</p>
+          <q-select
+            v-model="innerNews.tipo"
+            :options="categoryOptions"
+            map-options
+            emit-value
+            standout="bg-secondary"
+            class="bg-secondary"
+            input-class="form-input"
+            popup-content-class="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
+        </q-card-section>
+        <q-card-section>
           <form-field
             v-model="innerNews.titulo"
             label="Título"
@@ -61,11 +77,12 @@
 import DialogHeader from 'components/common/DialogHeader.vue'
 import FileDragDrop from 'components/common/FileDragDrop.vue'
 import { ATHLETICS } from 'src/constants/pages'
+import { categoryOptions } from 'src/constants/news'
 import { required } from 'src/utils/rules'
 
 const defaultNews = {
   titulo: '',
-  id_usuario: '00000000-0000-0000-0000-000000000000',
+  id_usuario: '511b7a87-bf63-4584-98b6-a0085eb33f0f ', // Temporário, até a APi pegar o ID do usuário logado
   imagem: '',
   descricao: '',
   tags: '',
@@ -80,7 +97,8 @@ export default {
   },
   data: () => ({
     headerIcon: ATHLETICS.icon,
-    innerNews: { ...defaultNews }
+    innerNews: { ...defaultNews },
+    categoryOptions
   }),
   created () {
     if (this.news) {

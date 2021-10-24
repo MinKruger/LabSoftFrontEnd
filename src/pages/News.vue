@@ -66,7 +66,7 @@ import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 
 import { NEWS } from 'src/constants/pages'
 import {
-  categoryFilterOptions,
+  categoryOptions,
   intervalFilterOptions,
   NEWS as NEWS_ENUM
 } from 'src/constants/news'
@@ -79,7 +79,7 @@ export default {
   data: () => ({
     headerInfo: NEWS,
     categoryFilterBy: NEWS_ENUM,
-    categoryFilterOptions,
+    categoryFilterOptions: categoryOptions,
     intervalFilterBy: null,
     intervalFilterOptions,
     news: []
