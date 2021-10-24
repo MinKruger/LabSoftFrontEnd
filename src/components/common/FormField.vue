@@ -38,9 +38,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.form-input::placeholder {
-  color: $accent;
-}
-</style>

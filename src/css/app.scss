@@ -14,3 +14,7 @@ body.body--dark {
   max-width: 700px !important;
   width: 100%;
 }
+
+.form-input::placeholder {
+  color: $accent;
+}
