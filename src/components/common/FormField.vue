@@ -6,6 +6,8 @@
       :rules="rules"
       :placeholder="placeholder || label"
       :type="type"
+      :autogrow="autogrow"
+      :input-style="inputStyle"
       standout="bg-secondary"
       class="bg-secondary"
       input-class="form-input"
@@ -24,7 +26,9 @@ export default {
     rules: Array,
     label: String,
     placeholder: String,
-    type: String
+    type: String,
+    autogrow: Boolean,
+    inputStyle: String
   },
   computed: {
     inputVal: {
