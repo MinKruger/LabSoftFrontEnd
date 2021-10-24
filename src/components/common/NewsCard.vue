@@ -3,7 +3,7 @@
     <q-img
       width="150px"
       height="150px"
-      :src="news.imagem"
+      :src="newsImage"
       style="min-width: 150px"
     >
       <div class="fit news-card-image-gradient" />
@@ -85,8 +85,13 @@ export default {
         'DD, MMMM [de] YYYY'
       )
     },
+    newsImage () {
+      return this.news.imagem.startsWith('data:')
+        ? this.news.imagem
+        : 'http://' + this.news.imagem
+    },
     tags () {
-      return this.news.tags?.split(/\s*,\s*/) || []
+      return this.news.tags?.split(/\s?,\s?/) || []
     }
   },
   methods: {

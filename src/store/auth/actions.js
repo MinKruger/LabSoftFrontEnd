@@ -1,23 +1,27 @@
 import Vue from 'vue'
+import { Notify } from 'quasar'
 
 export async function attemptLogin ({ commit }, userCredentials) {
-  // TODO: ver rota correta no backend
-  const { data } = await Vue.prototype.$axios.post('login', userCredentials, {
-    customErrorHandlers: {
-      401: data => {
-        if (data.message) {
-          Vue.prototype.$q.notify({
+  const { data } = await Vue.prototype.$axios.post(
+    'auth/login',
+    userCredentials,
+    {
+      customErrorHandlers: {
+        401: data => {
+          Notify.create({
             type: 'alert',
             message: data.message
           })
         }
       }
     }
-  })
+  )
 
-  localStorage.setItem('access_token', data.access_token)
+  console.log(data)
 
-  commit('setUser', data.user)
+  localStorage.setItem('access_token', data.token)
+
+  // commit('setUser', data.user)
 
   return data
 }
