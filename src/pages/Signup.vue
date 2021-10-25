@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center" padding>
     <auth-card style="width: 400px">
-      <q-form @submit.prevent="attemptLogin">
+      <q-form @submit.prevent="attemptSignUp">
         <q-card-section class="text-center">
           <q-img src="logo.png" width="50%" />
         </q-card-section>
@@ -40,7 +40,7 @@
             label="Registrar-se"
             padding="sm xl"
             class="text-weight-bold"
-            :loading="loginLoading"
+            :loading="signupLoading"
           />
           <q-btn
             :to="{ name: 'Login' }"
@@ -71,15 +71,15 @@ const defaultUser = {
 
 export default {
   components: { AuthCard, ProfilePictureUpload },
-  name: 'Login',
+  name: 'Signup',
   data: () => ({
     user: { ...defaultUser },
-    loginLoading: false
+    signupLoading: false
   }),
   methods: {
-    async attemptLogin () {
+    async attemptSignUp () {
       try {
-        this.loginLoading = true
+        this.signupLoading = true
         const user = {
           ...this.user,
           foto: this.user.foto
@@ -96,7 +96,7 @@ export default {
         })
         await this.$router.push({ name: 'Login' })
       } finally {
-        this.loginLoading = false
+        this.signupLoading = false
       }
     },
     // Rules
