@@ -77,7 +77,5 @@ export const noFutureDate = (val, options, msg) => {
     .getTime()
   const selectedDate = date.extractDate(`${val} 00:00:00`, dateMask).getTime()
 
-  console.log(new Date(currentDate), new Date(selectedDate))
-
   return selectedDate <= currentDate || msg
 }

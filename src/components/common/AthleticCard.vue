@@ -6,9 +6,9 @@
       alt="Fundo Atlética"
     />
     <q-img
-      v-if="athletic.logo.includes('base64')"
+      v-if="athletic.logo"
       class="absolute-center logo"
-      :src="athletic.logo"
+      :src="`http://${athletic.logo}`"
     />
     <q-img
       v-else
@@ -34,20 +34,17 @@ export default {
       required: true
     }
   }
-  // computed: {
-  //   athleticName () {
-  //     return this.athletic.name.split(' ')
-  //   }
-  // }
 }
 </script>
 
 <style lang="scss">
 .athletic-card {
-  background: rgba($secondary, 0.5);
+  background: #1F2036;
   min-height: 500px;
   // width: 170px;
   overflow: hidden;
+  transition: all 0.5s;
+  border-radius: 10px;
 
   .sports-bg {
     width: 100%;
@@ -56,6 +53,7 @@ export default {
 
   .logo {
     width: 80%;
+    z-index: 1;
   }
 
   .ellipse {
@@ -65,7 +63,6 @@ export default {
     transform: translate(-50%, -65%);
     width: 125%;
     height: 105px;
-    z-index: -1;
   }
 
   .ellipse-white {
@@ -100,8 +97,36 @@ export default {
     );
   }
 
+  @keyframes aitf {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
   .name {
     word-spacing: 9999px;
+    line-height: 28px;
+
+    span {
+      letter-spacing: 0;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 1;
+    .name {
+      background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+      animation: aitf 80s linear infinite;
+
+      transform: translate3d(0,0,0);
+      backface-visibility: hidden;
+    }
   }
 }
 </style>
