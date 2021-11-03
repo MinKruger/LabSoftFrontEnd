@@ -16,6 +16,13 @@
           :key="link.title"
           v-bind="link"
         />
+        <q-btn
+          @click="() => logout()"
+          label="Sair"
+          flat
+          color="white"
+          class="logout-btn text-weight-bold q-px-md full-width"
+        />
       </q-list>
     </q-drawer>
     <q-page-container>
@@ -71,6 +78,12 @@ export default {
       leftDrawerOpen: false,
       drawerLinks
     }
+  },
+  methods: {
+    async logout () {
+      await this.$store.dispatch('auth/logout')
+      this.$router.push({ name: 'Login' })
+    }
   }
 }
 </script>
@@ -78,6 +91,10 @@ export default {
 <style lang="scss">
 .bg-drawer {
   background: rgba($secondary, 0.7);
+}
+
+.logout-btn {
+  margin-top: 8px;
 }
 
 * {
