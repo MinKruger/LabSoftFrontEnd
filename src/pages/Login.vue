@@ -7,7 +7,7 @@
         </q-card-section>
         <q-card-section class="q-gutter-y-md">
           <form-field
-            v-model="user.login"
+            v-model="user.email"
             label="E-mail"
             placeholder="email@email.com"
             type="email"
