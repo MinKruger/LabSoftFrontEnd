@@ -80,8 +80,8 @@ export default {
     }
   },
   methods: {
-    logout () {
-      localStorage.removeItem('access_token')
+    async logout () {
+      await this.$store.dispatch('auth/logout')
       this.$router.push({ name: 'Login' })
     }
   }
