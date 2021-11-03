@@ -1,3 +1,37 @@
+export const sizeTypes = {
+  KB: 1024,
+  MB: 1048576,
+  GB: 1073741824
+}
+
+export const regexSizeInString = /^(\d+)\s*(KB|MB|GB)$/
+
+/**
+ * Converts a string with its unit of measurement
+ *
+ * @param {number|string} size Size to be converted string (case-insensitive) or number in bytes
+ *
+ * Exemplos:
+ * - getSizeInBytes(1024)
+ * - getSizeInBytes('1 KB')
+ * - getSizeInBytes('3 mb')
+ * - getSizeInBytes('1024 Gb')
+ *
+ * @returns {number} Size in bytes
+ */
+export const getSizeInBytes = size => {
+  if (typeof size === 'number') return size
+  if (typeof size !== 'string') return null
+
+  size = size.toUpperCase()
+
+  let [, _size, type] = size.match(regexSizeInString)
+
+  _size = parseInt(_size)
+
+  return _size * sizeTypes[type]
+}
+
 /**
  * Returns if a file type matches an accepted types string
  * @param {File}   file   File to be tested if matches

@@ -27,7 +27,12 @@
           transition-show="scale"
           transition-hide="scale"
         >
-          <q-date :value="val" mask="DD/MM/YYYY" @input="setDate" />
+          <q-date
+            :value="val"
+            mask="DD/MM/YYYY"
+            @input="setDate"
+            class="bg-secondary"
+          />
         </q-popup-proxy>
       </q-btn>
     </template>

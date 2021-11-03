@@ -2,7 +2,7 @@ export const NEWS = 'NOTICIAS'
 export const EVENTS = 'EVENTOS'
 export const MATCHES = 'JOGOS'
 
-export const categoryFilterOptions = Object.freeze([
+export const categoryOptions = Object.freeze([
   { label: 'Notícias', value: NEWS },
   { label: 'Eventos', value: EVENTS },
   { label: 'Jogos', value: MATCHES }

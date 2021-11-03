@@ -3,7 +3,13 @@
     <page-header v-bind="headerInfo">
       <template #after>
         <div class="row q-gutter-sm">
-          <q-input filled label="Pesquise notícias" style="width: 300px" dense>
+          <q-input
+            v-model="search"
+            filled
+            label="Pesquise notícias"
+            style="width: 300px"
+            dense
+          >
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -66,7 +72,7 @@ import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 
 import { NEWS } from 'src/constants/pages'
 import {
-  categoryFilterOptions,
+  categoryOptions,
   intervalFilterOptions,
   NEWS as NEWS_ENUM
 } from 'src/constants/news'
@@ -79,14 +85,23 @@ export default {
   data: () => ({
     headerInfo: NEWS,
     categoryFilterBy: NEWS_ENUM,
-    categoryFilterOptions,
+    categoryFilterOptions: categoryOptions,
     intervalFilterBy: null,
     intervalFilterOptions,
+    search: '',
     news: []
   }),
   computed: {
     filteredNews () {
       let news = [...this.news]
+
+      if (this.search) {
+        news = news.filter(
+          _news =>
+            _news.titulo.includes(this.search) ||
+            _news.id_usuario.includes(this.search)
+        )
+      }
 
       if (this.intervalFilterBy) {
         const now = new Date()

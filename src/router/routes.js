@@ -1,12 +1,17 @@
 const routes = [
   {
-    path: '/login',
+    path: '/autenticacao',
     component: () => import('layouts/BlankLayout.vue'),
     children: [
       {
-        path: '',
+        path: 'login',
         name: 'Login',
         component: () => import('pages/Login.vue')
+      },
+      {
+        path: 'registro',
+        name: 'Signup',
+        component: () => import('pages/Signup.vue')
       },
       {
         path: 'esqueci-a-senha',

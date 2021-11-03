@@ -15,28 +15,6 @@ body.body--dark {
   width: 100%;
 }
 
-.userSelect {
-  font-weight: 400;
-  line-height: 28px;
-  letter-spacing: 0.00937em;
-  text-decoration: inherit;
-  text-transform: inherit;
-  border-radius: 0;
-  background: none;
-  padding: 6px 6px;
-  width: 100%;
-  color: white;
-  border: 1px solid rgba(0, 0, 0, 0.24);
-    option {
-      background: #23243d;
-      color: white;
-    }
-}
-
-.q-field--dark .q-field__control:before {
-  border-color: rgba(255, 255, 255, 0.0);
-}
-
-.q-field .q-field__control {
-  background-color: $secondary;
+.form-input::placeholder {
+  color: $accent;
 }

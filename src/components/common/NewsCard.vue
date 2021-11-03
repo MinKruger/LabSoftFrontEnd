@@ -1,6 +1,7 @@
 <template>
   <q-card class="row no-wrap bg-secondary" flat>
     <q-img
+      v-if="news.imagem"
       width="150px"
       height="150px"
       :src="newsImage"
@@ -8,59 +9,55 @@
     >
       <div class="fit news-card-image-gradient" />
     </q-img>
-    <div class="q-ml-sm relative-position" style="flex: 1">
-      <div class="row">
-        <div class="col">
-          <div class="q-mb-xs text-caption text-grey-5">
-            Postado por {{ news.id_usuario }}
-          </div>
-          <p class="text-body1 text-weight-bold ellipsis-2-lines">
-            {{ news.titulo }}
-          </p>
-          <q-card-section v-if="tags.length > 0" class="row q-gutter-sm">
-            <q-badge
-              v-for="tag in tags"
-              :key="tag"
-              :label="tag"
-              :color="getTagColor(tag)"
-              class="q-py-xs q-px-sm"
-            />
-          </q-card-section>
-        </div>
-        <div class="col-auto">
-          <q-btn @click.stop icon="more_vert" size="sm" round flat>
-            <q-menu>
-              <q-card class="bg-secondary">
-                <q-list>
-                  <q-item @click="editNews" clickable>
-                    <q-item-section side>
-                      <q-icon name="edit" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>
-                        Editar
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item @click="deleteNews" clickable>
-                    <q-item-section side>
-                      <q-icon name="o_delete_forever" color="pink" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>
-                        Excluir
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-card>
-            </q-menu>
-          </q-btn>
-        </div>
-      </div>
-      <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5">
-        {{ newsEventDate }}
-      </div>
+    <div class="q-ml-sm relative-position overflow-hidden" style="flex: 1">
+      <p class="q-mb-xs text-caption ellipsis text-grey-5 q-pr-lg full-width">
+        Postado por {{ news.id_usuario }}
+      </p>
+      <p class="text-body1 text-weight-bold ellipsis-2-lines">
+        {{ news.titulo }}
+      </p>
+      <q-card-section v-if="tags.length > 0" class="row q-gutter-sm">
+        <q-badge
+          v-for="tag in tags"
+          :key="tag"
+          :label="tag"
+          :color="getTagColor(tag)"
+          class="q-py-xs q-px-sm"
+        />
+      </q-card-section>
+    </div>
+    <div class="absolute-top-right">
+      <q-btn @click.stop icon="more_vert" size="sm" round flat>
+        <q-menu>
+          <q-card class="bg-secondary">
+            <q-list>
+              <q-item @click="editNews" clickable>
+                <q-item-section side>
+                  <q-icon name="edit" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    Editar
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item @click="deleteNews" clickable>
+                <q-item-section side>
+                  <q-icon name="o_delete_forever" color="pink" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    Excluir
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
+        </q-menu>
+      </q-btn>
+    </div>
+    <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5">
+      {{ newsEventDate }}
     </div>
   </q-card>
 </template>

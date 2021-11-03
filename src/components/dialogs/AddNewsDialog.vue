@@ -6,6 +6,41 @@
           :icon="headerIcon"
           :title="innerNews.id ? 'Editar Postagem' : 'Nova Postagem'"
         />
+        <div class="row">
+          <q-card-section class="col-12 col-sm-6">
+            <p class="text-subtitle2 text-uppercase text-weight-bold">Tipo</p>
+            <q-select
+              v-model="innerNews.tipo"
+              :options="categoryOptions"
+              map-options
+              emit-value
+              class="bg-secondary"
+              input-class="form-input"
+              popup-content-class="bg-secondary"
+              hide-bottom-space
+              outlined
+              dense
+            />
+          </q-card-section>
+          <q-card-section
+            class="col-12 col-sm-6"
+            style="padding-top: 16px !important"
+          >
+            <p class="text-subtitle2 text-uppercase text-weight-bold">
+              Data Evento
+            </p>
+            <date-picker
+              v-model="innerNews.data_evento"
+              :rules="[required]"
+              label="Data Evento"
+              class="bg-secondary"
+              standout="bg-secondary"
+              hide-bottom-space
+              outlined
+              dense
+            />
+          </q-card-section>
+        </div>
         <q-card-section>
           <form-field
             v-model="innerNews.titulo"
@@ -60,12 +95,14 @@
 <script>
 import DialogHeader from 'components/common/DialogHeader.vue'
 import FileDragDrop from 'components/common/FileDragDrop.vue'
+import DatePicker from 'components/common/DatePicker.vue'
 import { ATHLETICS } from 'src/constants/pages'
+import { categoryOptions } from 'src/constants/news'
 import { required } from 'src/utils/rules'
 
 const defaultNews = {
   titulo: '',
-  id_usuario: '00000000-0000-0000-0000-000000000000',
+  id_usuario: '511b7a87-bf63-4584-98b6-a0085eb33f0f ', // Temporário, até a APi pegar o ID do usuário logado
   imagem: '',
   descricao: '',
   tags: '',
@@ -74,13 +111,14 @@ const defaultNews = {
 }
 
 export default {
-  components: { DialogHeader, FileDragDrop },
+  components: { DialogHeader, FileDragDrop, DatePicker },
   props: {
     news: Object
   },
   data: () => ({
     headerIcon: ATHLETICS.icon,
-    innerNews: { ...defaultNews }
+    innerNews: { ...defaultNews },
+    categoryOptions
   }),
   created () {
     if (this.news) {
@@ -104,8 +142,6 @@ export default {
           ? this.innerNews.imagem.replace(/^data:.+;base64,/, '')
           : this.innerNews.imagem
       }
-
-      innerNews.id_usuario = '60549bff-e038-46f3-9192-0a658441ace3'
       const news = this.innerNews.id
         ? await this.updateNews(innerNews)
         : await this.storeNews(innerNews)
