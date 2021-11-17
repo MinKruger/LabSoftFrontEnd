@@ -94,7 +94,10 @@ export default {
 
       if (this.search) {
         athletics = athletics.filter(athletic =>
-          athletic.nome.includes(this.search)
+          athletic.nome
+            .normalize()
+            .toUpperCase()
+            .includes(this.search.normalize().toUpperCase())
         )
       }
       if (this.sortBy) athletics.sort(sortByOptions[this.sortBy])

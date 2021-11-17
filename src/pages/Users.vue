@@ -64,7 +64,12 @@ export default {
       let users = [...this.users]
 
       if (this.search) {
-        users = users.filter(athletic => athletic.nome.includes(this.search))
+        users = users.filter(user =>
+          user.nome
+            .normalize()
+            .toUpperCase()
+            .includes(this.search.normalize().toUpperCase())
+        )
       }
 
       return users

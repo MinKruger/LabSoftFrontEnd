@@ -100,8 +100,14 @@ export default {
       if (this.search) {
         news = news.filter(
           _news =>
-            _news.titulo.includes(this.search) ||
-            _news.id_usuario.includes(this.search)
+            _news.titulo
+              .normalize()
+              .toUpperCase()
+              .includes(this.search.normalize().toUpperCase()) ||
+            _news.usuario.nome
+              .normalize()
+              .toUpperCase()
+              .includes(this.search.normalize().toUpperCase())
         )
       }
 
