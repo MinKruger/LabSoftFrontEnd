@@ -38,6 +38,7 @@
           outline
         />
         <q-btn
+          v-if="$store.getters['auth/isDCE']"
           @click="editNews"
           color="blue"
           label="Editar"

@@ -90,7 +90,7 @@ export default {
     async uploadFile (file) {
       if (!checkFileType(file, this.acceptedImageFileTypes)) {
         return this.$q.notify({
-          type: 'alert',
+          type: 'warning',
           message: 'Formato do arquivo não suportado.'
         })
       }

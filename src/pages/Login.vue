@@ -3,7 +3,9 @@
     <auth-card style="width: 400px">
       <q-form @submit.prevent="attemptLogin">
         <q-card-section class="text-center">
-          <q-img src="logo.png" width="50%" />
+          <router-link :to="{ name: 'Home' }">
+            <q-img src="logo.png" width="50%" />
+          </router-link>
         </q-card-section>
         <q-card-section class="q-gutter-y-md">
           <form-field
@@ -57,7 +59,7 @@ import AuthCard from 'components/common/AuthCard.vue'
 import { required, validEmail } from 'src/utils/rules'
 
 const defaultUser = {
-  login: '',
+  email: '',
   senha: ''
 }
 

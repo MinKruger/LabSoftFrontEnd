@@ -1,7 +1,13 @@
 <template>
   <div class="full-width row q-gutter-x-md q-mb-lg">
     <div class="col-auto text-h5 row items-center">
-      <q-icon v-if="icon" :name="icon" size="lg" class="q-mr-md" />
+      <q-icon
+        @click="toggleLeftDrawer"
+        v-if="icon"
+        :name="icon"
+        size="lg"
+        class="q-mr-md cursor-pointer"
+      />
       <span class="text-weight-medium">
         {{ title }}
       </span>
@@ -20,6 +26,11 @@ export default {
       required: true
     },
     icon: String
+  },
+  methods: {
+    toggleLeftDrawer () {
+      this.$store.commit('layout/toggleLeftDrawerOpen')
+    }
   }
 }
 </script>

@@ -14,7 +14,12 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function ({ store }) {
+  const originalPush = VueRouter.prototype.push
+  VueRouter.prototype.push = function push (location) {
+    return originalPush.call(this, location).catch(err => err)
+  }
+
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -24,6 +29,35 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+
+  Router.beforeEach((to, _, next) => {
+    const user = store.getters['auth/getUser']
+    if (!user) {
+      if (to.matched.some(route => route.meta.authOnly)) {
+        Vue.prototype.$q.notify({
+          type: 'warning',
+          message: 'Faça o login para acessar esta página.'
+        })
+
+        return next({ name: 'Home' })
+      }
+
+      return next()
+    }
+
+    const isDCE = store.getters['auth/isDCE']
+
+    if (!isDCE && to.matched.some(route => route.meta?.dceOnly)) {
+      Vue.prototype.$q.notify({
+        type: 'warning',
+        message: 'Você não tem permissão para visualizar esta página.'
+      })
+
+      return next({ name: 'Home' })
+    }
+
+    return next()
   })
 
   return Router

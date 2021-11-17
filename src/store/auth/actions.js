@@ -9,7 +9,7 @@ export async function attemptLogin ({ commit }, userCredentials) {
       customErrorHandlers: {
         401: data => {
           Notify.create({
-            type: 'alert',
+            type: 'warning',
             message: data.message
           })
         }
@@ -19,7 +19,7 @@ export async function attemptLogin ({ commit }, userCredentials) {
 
   localStorage.setItem('access_token', data.token)
 
-  // commit('setUser', data.user)
+  commit('setUser', data.user)
 
   return data
 }
@@ -30,14 +30,14 @@ export async function logout ({ commit }) {
   if (token !== null) {
     localStorage.removeItem('access_token')
 
-    await Vue.prototype.$axios
-      .post('logout', null, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        ignoreErrorHandling: true
-      })
-      .catch(() => {})
+    //   await Vue.prototype.$axios
+    //     .post('logout', null, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`
+    //       },
+    //       ignoreErrorHandling: true
+    //     })
+    //     .catch(() => {})
   }
 
   commit('setUser', null)
