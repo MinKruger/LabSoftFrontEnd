@@ -20,7 +20,7 @@
           $store.getters['auth/isDCE'] && 'q-pr-lg'
         ]"
       >
-        Postado por {{ news.id_usuario }}
+        Postado por {{ news.usuario.nome }}
       </p>
       <p class="text-body1 text-weight-bold ellipsis-2-lines">
         {{ news.titulo }}
