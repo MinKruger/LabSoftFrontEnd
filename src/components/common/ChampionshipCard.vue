@@ -2,15 +2,13 @@
   <q-card class="championship-card full-height" flat>
     <q-card-section class="relative-position overflow-hidden">
       <p class="text-h6 text-weight-bold ellipsis-2-lines q-mb-xs q-pr-lg">
-        {{ championship.titulo }}
+        {{ championship.nome }}
       </p>
       <p class="text-body1 text-weight-bold text-grey-4 q-mb-xs">
         {{ championship.ano }}
+        <q-badge v-bind="modalityProps" class="q-ml-sm" />
       </p>
-      <p class="ellipsis-3-lines">
-        {{ championship.descricao }}
-      </p>
-      <div class="absolute-top-right">
+      <div v-if="$store.getters['auth/isDCE']" class="absolute-top-right">
         <q-btn @click.stop icon="more_vert" size="sm" round flat>
           <q-menu>
             <q-card class="bg-secondary">
@@ -22,16 +20,6 @@
                   <q-item-section>
                     <q-item-label>
                       Editar
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item @click="deleteChampionship" clickable>
-                  <q-item-section side>
-                    <q-icon name="o_delete_forever" color="pink" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>
-                      Excluir
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -53,19 +41,35 @@
           </p>
         </div>
       </div>
-      <p v-else class="text-body1">Em andamento</p>
+      <p v-else class="text-body1">{{ championshipStatus }}</p>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
+import { statusOptions, modalityColors } from 'src/constants/championships'
 import AddChampionshipDialog from '../dialogs/AddChampionshipDialog.vue'
+
 export default {
   name: 'ChampionshipCard',
   props: {
     championship: {
       type: Object,
       required: true
+    },
+    modalities: Array
+  },
+  computed: {
+    championshipStatus () {
+      return statusOptions.find(
+        status => status.value === this.championship.status
+      )?.label
+    },
+    modalityProps () {
+      return {
+        label: this.championship.modalidade.nome,
+        color: modalityColors[this.championship.modalidade.nome]
+      }
     }
   },
   methods: {
@@ -73,30 +77,10 @@ export default {
       this.$q
         .dialog({
           component: AddChampionshipDialog,
-          championship: this.championship
+          championship: this.championship,
+          modalities: this.modalities
         })
         .onOk(championship => this.$emit('edit', championship))
-    },
-    deleteChampionship () {
-      this.$q
-        .dialog({
-          title: 'Excluir Campeonato',
-          message: 'Deseja realmente excluir este campeonato?',
-          class: 'bg-primary',
-          ok: {
-            label: 'Excluir',
-            color: 'blue',
-            padding: 'sm md'
-          },
-          cancel: {
-            color: 'white',
-            outline: true,
-            padding: 'sm md'
-          }
-        })
-        .onOk(() => {
-          this.$emit('delete', this.news)
-        })
     }
   }
 }

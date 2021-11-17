@@ -5,7 +5,7 @@
         <dialog-header :icon="headerIcon" :title="headerTitle">
           <q-btn
             v-if="innerChampionship.id"
-            @click="deleteAthletic"
+            @click="deleteChampionship"
             icon="o_delete_forever"
             class="absolute-top-right"
             color="pink"
@@ -16,25 +16,52 @@
         </dialog-header>
         <q-card-section>
           <form-field
-            v-model="innerChampionship.titulo"
+            v-model="innerChampionship.nome"
             label="Nome"
             :rules="[required]"
           />
         </q-card-section>
         <q-card-section>
           <form-field
-            v-model="innerChampionship.modalidade"
-            label="Modalidade"
+            v-model.number="innerChampionship.ano"
+            label="Ano"
             :rules="[required]"
           />
         </q-card-section>
         <q-card-section>
-          <form-field
-            v-model="innerChampionship.descricao"
-            label="Descrição"
-            input-style="min-height: 7em"
-            :rules="[required]"
-            autogrow
+          <p class="text-subtitle2 text-uppercase text-weight-bold">
+            Status
+          </p>
+          <q-select
+            v-model="innerChampionship.status"
+            :options="statusOptions"
+            class="bg-secondary"
+            input-class="form-input"
+            popup-content-class="bg-secondary"
+            hide-bottom-space
+            map-options
+            emit-value
+            outlined
+            dense
+          />
+        </q-card-section>
+        <q-card-section>
+          <p class="text-subtitle2 text-uppercase text-weight-bold">
+            Modalidade
+          </p>
+          <q-select
+            v-model="innerChampionship.id_modalidade"
+            :options="modalities"
+            class="bg-secondary"
+            input-class="form-input"
+            popup-content-class="bg-secondary"
+            option-label="nome"
+            option-value="id"
+            hide-bottom-space
+            map-options
+            emit-value
+            outlined
+            dense
           />
         </q-card-section>
         <q-card-section>
@@ -42,13 +69,16 @@
             Tipo de Evento
           </p>
           <q-select
-            v-model="innerChampionship.tipo"
-            :options="typeOptions"
-            :rules="[required]"
+            v-model="innerChampionship.id_evento"
+            :options="events"
             class="bg-secondary"
             input-class="form-input"
             popup-content-class="bg-secondary"
+            option-label="nome"
+            option-value="id"
             hide-bottom-space
+            map-options
+            emit-value
             outlined
             dense
           />
@@ -65,7 +95,7 @@
           <q-btn
             type="submit"
             color="blue"
-            label="Adicionar"
+            label="Salvar"
             padding="sm md"
             class="text-weight-bold"
           />
@@ -78,36 +108,39 @@
 <script>
 import DialogHeader from 'src/components/common/DialogHeader.vue'
 import { CHAMPIONSHIPS } from 'src/constants/pages'
-import { typeOptions } from 'src/constants/championships'
+import { statusOptions } from 'src/constants/championships'
 import { required } from 'src/utils/rules'
 
 const defaultChampionship = {
-  titulo: '',
-  modalidade: '',
-  descricao: '',
-  tipo: null
+  nome: '',
+  id_modalidade: null,
+  id_evento: null,
+  ano: null
 }
 
 export default {
   components: { DialogHeader },
   props: {
     championship: Object,
-    onDelete: Function
+    onDelete: Function,
+    modalities: Array
   },
   data: () => ({
     headerIcon: CHAMPIONSHIPS.icon,
     innerChampionship: { ...defaultChampionship },
-    typeOptions
+    statusOptions,
+    events: []
   }),
   computed: {
     headerTitle () {
-      return this.innerChampionship.id ? 'Editar Campeonato' : 'Nova Campeonato'
+      return this.innerChampionship.id ? 'Editar Campeonato' : 'Novo Campeonato'
     }
   },
-  created () {
+  async created () {
     if (this.championship) {
       Object.assign(this.innerChampionship, this.championship)
     }
+    await this.getEvents()
   },
   methods: {
     show () {
@@ -119,19 +152,29 @@ export default {
     onDialogHide () {
       this.$emit('hide')
     },
-    async submit () {
-      const athletic = this.innerChampionship.id
-        ? await this.updateAthletic(this.innerChampionship)
-        : await this.storeAthletic(this.innerChampionship)
+    async getEvents () {
+      const { data } = await this.$axios.get('eventos')
 
-      this.$emit('ok', athletic)
+      this.events = data
+    },
+    async submit () {
+      const championship = this.innerChampionship.id
+        ? await this.updateChampionship(this.innerChampionship)
+        : await this.storeChampionship(this.innerChampionship)
+
+      this.$emit('ok', championship)
       this.hide()
     },
     onCancelClick () {
       this.hide()
     },
     async storeChampionship (championship) {
-      const { data } = await this.$axios.post('atleticas', championship)
+      const { data } = await this.$axios.post('campeonatos', championship)
+
+      this.$q.notify({
+        type: 'positive',
+        message: 'Campeonato cadastrado com sucesso.'
+      })
 
       return data
     },
@@ -141,9 +184,14 @@ export default {
         championship
       )
 
+      this.$q.notify({
+        type: 'positive',
+        message: 'Campeonato atualizado com sucesso.'
+      })
+
       return data
     },
-    deleteAthletic () {
+    deleteChampionship () {
       this.$q
         .dialog({
           title: 'Excluir Campeonato',

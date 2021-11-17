@@ -22,7 +22,7 @@
 export default {
   name: 'FormField',
   props: {
-    value: String,
+    value: { required: true },
     rules: Array,
     label: String,
     placeholder: String,

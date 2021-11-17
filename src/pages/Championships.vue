@@ -15,6 +15,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="$store.getters['auth/isDCE']"
             @click="() => openAddChampionshipDialog()"
             label="Novo Campeonato"
             color="blue"
@@ -41,6 +42,10 @@
         style="width: 175px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        option-label="nome"
+        option-value="id"
+        map-options
+        emit-value
         clearable
         rounded
       />
@@ -52,10 +57,11 @@
         class="col-12 col-sm-6 col-lg-4"
       >
         <championship-card
-          @edit="championship => openAddChampionshipDialog(championship)"
+          @edit="championship => getChampionships()"
           @click.native="openShowChampionshipDialog(championship)"
           class="cursor-pointer"
           :championship="championship"
+          :modalities="modalityOptions"
         />
       </div>
     </div>
@@ -65,21 +71,15 @@
 <script>
 import PageHeader from 'src/components/common/PageHeader.vue'
 import { CHAMPIONSHIPS } from 'src/constants/pages'
-import { sortOptions, modalityOptions } from 'src/constants/championships'
+import { sortOptions } from 'src/constants/championships'
 import ChampionshipCard from 'src/components/common/ChampionshipCard.vue'
 import ShowChampionshipDialog from 'src/components/dialogs/ShowChampionshipDialog.vue'
 import AddChampionshipDialog from 'src/components/dialogs/AddChampionshipDialog.vue'
 
-const championships = [
-  {
-    id: 1,
-    titulo: 'Campeonato Dale',
-    ano: 2021,
-    descricao:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    vencedor: 'Rinocerontes'
-  }
-]
+const sortByOptions = {
+  Alfabética: (a, b) =>
+    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' })
+}
 
 export default {
   components: { PageHeader, ChampionshipCard },
@@ -89,21 +89,61 @@ export default {
     sortBy: null,
     sortOptions,
     modalityFilterBy: null,
-    modalityOptions,
+    modalityOptions: [],
     search: '',
-    championships
+    championships: []
   }),
   computed: {
     filteredChampionships () {
-      return this.championships
+      let championships = [...this.championships]
+
+      if (this.search) {
+        championships = championships.filter(championship =>
+          championship.nome
+            .normalize()
+            .toUpperCase()
+            .includes(this.search.normalize().toUpperCase())
+        )
+      }
+
+      if (this.modalityFilterBy) {
+        championships = championships.filter(
+          championship => championship.id_modalidade === this.modalityFilterBy
+        )
+      }
+
+      if (this.sortBy) championships.sort(sortByOptions[this.sortBy])
+
+      return championships
     }
   },
+  async created () {
+    await Promise.allSettled([this.getChampionships(), this.getModalities()])
+  },
   methods: {
-    openAddChampionshipDialog (selectedChampionship) {
-      this.$q.dialog({
-        component: AddChampionshipDialog,
-        championship: selectedChampionship
+    async getChampionships () {
+      const { data } = await this.$axios.get('campeonatos', {
+        params: {
+          limit: Number.MAX_SAFE_INTEGER,
+          page: 1
+        }
       })
+
+      this.championships = data.campeonatos
+    },
+    async getModalities () {
+      const { data } = await this.$axios.get('modalidades')
+
+      this.modalityOptions = data
+    },
+    openAddChampionshipDialog (selectedChampionship) {
+      this.$q
+        .dialog({
+          component: AddChampionshipDialog,
+          championship: selectedChampionship,
+          modalities: this.modalityOptions
+        })
+        .onOk(this.getChampionships)
     },
     openShowChampionshipDialog (selectedChampionship) {
       this.$q.dialog({
