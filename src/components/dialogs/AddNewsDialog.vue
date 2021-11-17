@@ -67,9 +67,6 @@
             placeholder="Digite o texto aqui"
           />
         </q-card-section>
-        <q-card-section>
-          <form-field v-model="innerNews.tags" label="Tags" />
-        </q-card-section>
         <q-card-actions align="right" class="q-pa-md">
           <q-btn
             @click="hide"
@@ -105,7 +102,6 @@ const defaultNews = {
   id_usuario: '511b7a87-bf63-4584-98b6-a0085eb33f0f ', // Temporário, até a APi pegar o ID do usuário logado
   imagem: '',
   descricao: '',
-  tags: '',
   tipo: 'NOTICIAS',
   data_evento: new Date().toLocaleDateString('pt-BR')
 }
@@ -155,10 +151,20 @@ export default {
     async storeNews (news) {
       const { data } = await this.$axios.post('postagens', news)
 
+      this.$q.notify({
+        type: 'positive',
+        message: 'Notícia cadastrada com sucesso.'
+      })
+
       return data
     },
     async updateNews (news) {
       const { data } = await this.$axios.put(`postagens/${news.id}`, news)
+
+      this.$q.notify({
+        type: 'positive',
+        message: 'Notícia atualizada com sucesso.'
+      })
 
       return data
     },

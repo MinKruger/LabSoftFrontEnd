@@ -3,12 +3,19 @@
     <page-header v-bind="headerInfo">
       <template #after>
         <div class="row q-gutter-sm">
-          <q-input filled v-model="search" label="Pesquise pelo nome" style="width: 300px" dense>
+          <q-input
+            filled
+            v-model="search"
+            label="Pesquise pelo nome"
+            style="width: 300px"
+            dense
+          >
             <template #prepend>
               <q-icon name="search" />
             </template>
           </q-input>
           <q-btn
+            v-if="$store.getters['auth/isDCE']"
             @click="() => openAddUserDialog()"
             label="Adicionar"
             color="blue"
@@ -23,7 +30,11 @@
         :key="user.id"
         class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
-      <user-card @click.native="openAddUserDialog(user)" :user="user" :athletics="athletics" />
+        <user-card
+          @click.native="openAddUserDialog(user)"
+          :user="user"
+          :athletics="athletics"
+        />
       </div>
     </div>
   </q-page>
@@ -53,8 +64,11 @@ export default {
       let users = [...this.users]
 
       if (this.search) {
-        users = users.filter(athletic =>
-          athletic.nome.includes(this.search)
+        users = users.filter(user =>
+          user.nome
+            .normalize()
+            .toUpperCase()
+            .includes(this.search.normalize().toUpperCase())
         )
       }
 
@@ -96,5 +110,4 @@ export default {
   gap: 16px;
   padding-bottom: 20px;
 }
-
 </style>

@@ -57,6 +57,7 @@
       >
         <news-card
           @edit="__news => onNewsSubmit(_news, __news)"
+          @delete="onNewsDelete"
           @click.native="openShowNewsDialog(_news)"
           class="cursor-pointer"
           :news="_news"
@@ -99,8 +100,14 @@ export default {
       if (this.search) {
         news = news.filter(
           _news =>
-            _news.titulo.includes(this.search) ||
-            _news.id_usuario.includes(this.search)
+            _news.titulo
+              .normalize()
+              .toUpperCase()
+              .includes(this.search.normalize().toUpperCase()) ||
+            _news.usuario.nome
+              .normalize()
+              .toUpperCase()
+              .includes(this.search.normalize().toUpperCase())
         )
       }
 
@@ -147,6 +154,9 @@ export default {
     },
     async onNewsSubmit (selectedNews, news) {
       await this.getNews()
+    },
+    onNewsDelete (news) {
+      this.news.splice(this.news.indexOf(news), 1)
     }
   },
   watch: {

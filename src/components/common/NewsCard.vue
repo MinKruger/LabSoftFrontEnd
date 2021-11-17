@@ -20,20 +20,12 @@
           $store.getters['auth/isDCE'] && 'q-pr-lg'
         ]"
       >
-        Postado por {{ news.id_usuario }}
+        Postado por {{ news.usuario.nome }}
       </p>
-      <p class="text-body1 text-weight-bold ellipsis-2-lines">
+      <p class="text-body1 text-weight-bold ellipsis-2-lines q-mb-xs">
         {{ news.titulo }}
       </p>
-      <q-card-section v-if="tags.length > 0" class="row q-gutter-sm">
-        <q-badge
-          v-for="tag in tags"
-          :key="tag"
-          :label="tag"
-          :color="getTagColor(tag)"
-          class="q-py-xs q-px-sm"
-        />
-      </q-card-section>
+      <p class="text-caption ellipsis-3-lines" v-html="news.descricao" />
     </div>
     <div v-if="$store.getters['auth/isDCE']" class="absolute-top-right">
       <q-btn @click.stop icon="more_vert" size="sm" round flat>
@@ -65,7 +57,7 @@
         </q-menu>
       </q-btn>
     </div>
-    <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5">
+    <div class="absolute-bottom-right q-pa-xs text-caption text-grey-5 ">
       {{ newsEventDate }}
     </div>
   </q-card>
@@ -74,6 +66,7 @@
 <script>
 import { tagsColors } from 'src/constants/news'
 import { date } from 'quasar'
+import { removeHtmlTags } from 'src/utils'
 import AddNewsDialog from 'components/dialogs/AddNewsDialog.vue'
 
 export default {
@@ -96,8 +89,8 @@ export default {
         ? this.news.imagem
         : 'http://' + this.news.imagem
     },
-    tags () {
-      return this.news.tags?.split(/\s?,\s?/) || []
+    newsDescription () {
+      return removeHtmlTags(this.news.descricao)
     }
   },
   methods: {
@@ -126,7 +119,14 @@ export default {
             padding: 'sm md'
           }
         })
-        .onOk(() => {
+        .onOk(async () => {
+          await this.$axios.delete(`postagens/${this.news.id}`)
+
+          this.$q.notify({
+            type: 'positive',
+            message: 'Notícia excluída com sucesso.'
+          })
+
           this.$emit('delete', this.news)
           this.hide()
         })

@@ -13,7 +13,7 @@
       </q-img>
       <q-card-section>
         <p class="text-grey-4 text-caption">
-          Postado por {{ news.id_usuario }}
+          Postado por {{ news.usuario.nome }}
           •
           {{ newsEventDate }}
         </p>
