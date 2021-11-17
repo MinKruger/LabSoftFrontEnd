@@ -59,7 +59,7 @@ import AuthCard from 'components/common/AuthCard.vue'
 import { required, validEmail } from 'src/utils/rules'
 
 const defaultUser = {
-  login: '',
+  email: '',
   senha: ''
 }
 
