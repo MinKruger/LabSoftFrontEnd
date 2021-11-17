@@ -151,10 +151,20 @@ export default {
     async storeNews (news) {
       const { data } = await this.$axios.post('postagens', news)
 
+      this.$q.notify({
+        type: 'positive',
+        message: 'Notícia cadastrada com sucesso.'
+      })
+
       return data
     },
     async updateNews (news) {
       const { data } = await this.$axios.put(`postagens/${news.id}`, news)
+
+      this.$q.notify({
+        type: 'positive',
+        message: 'Notícia atualizada com sucesso.'
+      })
 
       return data
     },
