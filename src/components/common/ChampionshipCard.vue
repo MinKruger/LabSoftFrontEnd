@@ -1,7 +1,7 @@
 <template>
   <q-card class="championship-card full-height" flat>
     <q-card-section class="relative-position overflow-hidden">
-      <p class="text-h6 text-weight-bold ellipsis-2-lines q-mb-xs q-pr-lg">
+      <p class="text-h6 text-weight-bold ellipsis q-mb-xs q-pr-lg">
         {{ championship.nome }}
       </p>
       <p class="text-body1 text-weight-bold text-grey-4 q-mb-xs">
@@ -41,7 +41,7 @@
           </p>
         </div>
       </div>
-      <p v-else class="text-body1">{{ championshipStatus }}</p>
+      <p v-else class="text-body1" :class="championshipStatus">{{ championshipStatus }}</p>
     </q-card-section>
   </q-card>
 </template>
@@ -90,9 +90,19 @@ export default {
 .championship-card {
   background: rgba($secondary, 0.5);
   overflow: hidden;
+  border-radius: 10px;
 
   .championship-winner {
     background: rgba($secondary, 0.7);
+
+    p {
+      margin: 0;
+      font-weight: $semibold;
+
+      &.Andamento {
+        color: $green;
+      }
+    }
   }
 }
 </style>
