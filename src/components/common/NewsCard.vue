@@ -126,7 +126,14 @@ export default {
             padding: 'sm md'
           }
         })
-        .onOk(() => {
+        .onOk(async () => {
+          await this.$axios.delete(`postagens/${this.news.id}`)
+
+          this.$q.notify({
+            type: 'positive',
+            message: 'Notícia excluída com sucesso.'
+          })
+
           this.$emit('delete', this.news)
           this.hide()
         })
