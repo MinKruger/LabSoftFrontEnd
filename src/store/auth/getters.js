@@ -2,34 +2,22 @@ export function getUser (state) {
   return state.user
 }
 
-export function isActive (state) {
-  return state.user && state.user.is_active
-}
-
-export function isAdmin (state) {
-  return state.user && state.user.is_admin
-}
-
-export function isAssociate (state) {
-  return state.user && state.user.is_partner
-}
-
-export function isEvaluator (state) {
-  return state.user && state.user.is_evaluator
-}
-
-export function isMaster (state) {
-  return state.user && state.user.is_master
-}
-
-export function isApp (state) {
-  return isAssociate(state)
-}
-
-export function isDashboard (state) {
-  return isAdmin(state) || isEvaluator(state)
-}
-
 export function isAuthenticated (state) {
-  return Boolean(state.user)
+  return !!state.user
+}
+
+export function isStudent (state) {
+  return isAuthenticated(state) && state.user.permissao === 'aluno'
+}
+
+export function isAthletic (state) {
+  return isAuthenticated(state) && state.user.permissao === 'atletica'
+}
+
+export function isDCE (state) {
+  return isAuthenticated(state) && state.user.permissao.startsWith('dce')
+}
+
+export function getDceLevel (state) {
+  return isDCE(state) ? parseInt(state.user.permissao.slice(-1)) : null
 }

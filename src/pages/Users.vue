@@ -3,7 +3,7 @@
     <page-header v-bind="headerInfo">
       <template #after>
         <div class="row q-gutter-sm">
-          <q-input filled label="Pesquise pelo nome" style="width: 300px" dense>
+          <q-input filled v-model="search" label="Pesquise pelo nome" style="width: 300px" dense>
             <template #prepend>
               <q-icon name="search" />
             </template>
@@ -17,12 +17,14 @@
         </div>
       </template>
     </page-header>
-    <div
-        v-for="user in users"
+    <div class="users-grid">
+      <div
+        v-for="user in filteredUsers"
         :key="user.id"
-        class="users-grid"
+        class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
-      <user-card @click.native="openAddUserDialog(user)" :user="user" />
+      <user-card @click.native="openAddUserDialog(user)" :user="user" :athletics="athletics" />
+      </div>
     </div>
   </q-page>
 </template>
@@ -38,37 +40,49 @@ export default {
   name: 'Users',
   data: () => ({
     headerInfo: USERS,
-    users: [
-      {
-        id: 1,
-        name: 'Nome Sobrenome',
-        email: 'emailqualquer@hotmail.com',
-        type: 'Tipo de permissão',
-        athletic: 'Nome da atlética',
-        picture: 'picture1.png'
-      }
-    ]
+    users: [],
+    athletics: [],
+    search: ''
   }),
-  // async created () {
-  //   const { data } = await this.$axios.get('atletica')
-  //   this.users = data
-  // },
+  async created () {
+    await this.getAthletics()
+    await this.getUsers()
+  },
+  computed: {
+    filteredUsers () {
+      let users = [...this.users]
+
+      if (this.search) {
+        users = users.filter(athletic =>
+          athletic.nome.includes(this.search)
+        )
+      }
+
+      return users
+    }
+  },
   methods: {
+    async getUsers () {
+      const { data } = await this.$axios.get('usuarios')
+      this.users = data.filter(e => e.permissao !== 'aluno')
+    },
+    async getAthletics () {
+      const { data } = await this.$axios.get('atleticas')
+      this.athletics = data
+    },
     openAddUserDialog (user) {
       this.$q
         .dialog({
           component: AddUserDialog,
-          user
+          user,
+          athletics: this.athletics,
+          onDelete: _user => {
+            const index = this.users.findIndex(a => a.id === _user.id)
+            if (index > -1) this.users.splice(index, 1)
+          }
         })
         .onOk(async _user => {
-          // if (_user.id) {
-          //   Object.assign(athletic, _user)
-          // } else {
-          //   this.athletics.push({
-          //     ..._user,
-          //     id: this.athletics.length + 1
-          //   })
-          // }
+          await this.getUsers()
         })
     }
   }
@@ -80,6 +94,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(209px, 1fr));
   gap: 16px;
+  padding-bottom: 20px;
 }
 
 </style>

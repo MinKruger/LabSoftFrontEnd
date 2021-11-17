@@ -1,12 +1,17 @@
 const routes = [
   {
-    path: '/login',
+    path: '/autenticacao',
     component: () => import('layouts/BlankLayout.vue'),
     children: [
       {
-        path: '',
+        path: 'login',
         name: 'Login',
         component: () => import('pages/Login.vue')
+      },
+      {
+        path: 'registro',
+        name: 'Signup',
+        component: () => import('pages/Signup.vue')
       },
       {
         path: 'esqueci-a-senha',
@@ -32,37 +37,59 @@ const routes = [
       {
         path: 'atleticas',
         name: 'Athletics',
-        component: () => import('pages/Athletics.vue')
+        component: () => import('pages/Athletics.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'campeonatos',
         name: 'Championships',
-        component: () => import('pages/Championships.vue')
+        component: () => import('pages/Championships.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'jogos',
         name: 'Matches',
-        component: () => import('pages/Matches.vue')
+        component: () => import('pages/Matches.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'jogadores',
         name: 'Players',
-        component: () => import('pages/Players.vue')
+        component: () => import('pages/Players.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'noticias',
         name: 'News',
-        component: () => import('pages/News.vue')
+        component: () => import('pages/News.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'parceiros',
         name: 'Partners',
-        component: () => import('pages/Partners.vue')
+        component: () => import('pages/Partners.vue'),
+        meta: {
+          authOnly: true
+        }
       },
       {
         path: 'usuarios',
         name: 'Users',
-        component: () => import('pages/Users.vue')
+        component: () => import('pages/Users.vue'),
+        meta: {
+          authOnly: true,
+          dceOnly: true
+        }
       }
     ]
   },

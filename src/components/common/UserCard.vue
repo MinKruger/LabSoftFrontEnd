@@ -2,19 +2,13 @@
   <q-card class="bg-user-card" flat>
     <div class="user-picture">
       <q-img
-        v-if="user.picture.includes('base64')"
+        v-if="user && user.foto"
         class="picture"
-        :src="user.picture"
-      />
-      <q-img
-        v-else
-        class="picture"
-        :src="`user_pictures/${user.picture}`"
-        alt="Imagem do usuário"
+        :src="`http://178.238.233.159:5555${user.foto}`"
       />
     </div>
     <div class="user-name">
-        {{user.name}}
+        {{user.nome}}
       </div>
       <div class="user-email">
         {{user.email}}
@@ -26,7 +20,7 @@
           </div>
 
           <p>
-            {{user.type}}
+            {{user.permissao}}
           </p>
         </div>
         <div class="user-item">
@@ -35,7 +29,7 @@
           </div>
 
           <p>
-            {{user.athletic}}
+            {{ athleticName }}
           </p>
         </div>
       </div>
@@ -46,9 +40,15 @@
 export default {
   name: 'UserCard',
   props: {
+    athletics: Array,
     user: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    athleticName () {
+      return this.athletics.find(e => e.id === this.user.id_atletica)?.nome || ''
     }
   }
 }
@@ -57,11 +57,18 @@ export default {
 <style lang="scss">
 .bg-user-card {
   background: rgba($secondary, 0.5);
+  height: 100%;
   width: 100%;
   padding: 35px 20px;
   overflow: hidden;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.2s all ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+    z-index: 1;
+  }
 
   .picture {
     display: block;
@@ -74,6 +81,7 @@ export default {
 
   .user-picture {
     margin-bottom: 24px;
+    min-height: 103px;
   }
 
   .user-name {
@@ -107,6 +115,7 @@ export default {
 
     .user-item {
       color: $text2;
+      text-align: center;
 
       .icon {
         height: 24px;
@@ -125,6 +134,7 @@ export default {
         text-overflow: ellipsis;
         font-size: 12px;
         margin-top: 8px;
+        align-self: center;
       }
     }
   }

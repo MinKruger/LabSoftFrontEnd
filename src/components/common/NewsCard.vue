@@ -1,5 +1,5 @@
 <template>
-  <q-card class="row no-wrap bg-secondary" flat>
+  <q-card class="row no-wrap bg-secondary full-height" flat>
     <q-img
       v-if="news.imagem"
       width="150px"
@@ -10,7 +10,16 @@
       <div class="fit news-card-image-gradient" />
     </q-img>
     <div class="q-ml-sm relative-position overflow-hidden" style="flex: 1">
-      <p class="q-mb-xs text-caption ellipsis text-grey-5 q-pr-lg full-width">
+      <p
+        :class="[
+          'q-mb-xs',
+          'text-caption',
+          'ellipsis',
+          'text-grey-5',
+          'full-width',
+          $store.getters['auth/isDCE'] && 'q-pr-lg'
+        ]"
+      >
         Postado por {{ news.id_usuario }}
       </p>
       <p class="text-body1 text-weight-bold ellipsis-2-lines">
@@ -26,7 +35,7 @@
         />
       </q-card-section>
     </div>
-    <div class="absolute-top-right">
+    <div v-if="$store.getters['auth/isDCE']" class="absolute-top-right">
       <q-btn @click.stop icon="more_vert" size="sm" round flat>
         <q-menu>
           <q-card class="bg-secondary">

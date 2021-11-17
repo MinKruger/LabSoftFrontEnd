@@ -7,14 +7,14 @@ export const handleErrors = async (
 ) => {
   if (!window.navigator?.onLine) {
     return Notify.create({
-      type: 'alert',
+      type: 'warning',
       message: 'Sem conexão com a internet.'
     })
   }
 
   if (!error.response || typeof error.response !== 'object') {
     return Notify.create({
-      type: 'alert',
+      type: 'warning',
       message: 'Problemas de conexão, por favor tente mais tarde.'
     })
   }
@@ -22,7 +22,7 @@ export const handleErrors = async (
   const defaultErrorHandlers = {
     400: data => {
       Vue.prototype.$q.notify({
-        type: 'alert',
+        type: 'warning',
         message: data.message
       })
     },
@@ -30,7 +30,7 @@ export const handleErrors = async (
       await store.dispatch('auth/logout')
 
       Vue.prototype.$q.notify({
-        type: 'alert',
+        type: 'warning',
         message: 'Sua sessão expirou, por favor faça novamente o login.'
       })
       await router.push({ name: 'Login' })
@@ -38,7 +38,7 @@ export const handleErrors = async (
     403: async (/* data */) => {
       await router.replace({ name: 'Login' })
       Vue.prototype.$q.notify({
-        type: 'alert',
+        type: 'warning',
         message:
           'Você não possui permissões suficientes para realizar essa ação.'
       })
@@ -46,7 +46,7 @@ export const handleErrors = async (
     422: data => {
       const errors = Object.values(data.errors).flat()
       Vue.prototype.$q.notify({
-        type: 'alert',
+        type: 'warning',
         message: errors.shift()
       })
     },
@@ -66,7 +66,7 @@ export const handleErrors = async (
     },
     503: (/* data */) => {
       Vue.prototype.$q.notify({
-        type: 'alert',
+        type: 'warning',
         message: 'Nós estamos em manutenção. Desculpe-nos pelo transtorno.'
       })
       // await router.push({ name: 'Maintenance' })

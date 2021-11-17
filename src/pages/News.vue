@@ -15,6 +15,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="$store.getters['auth/isDCE']"
             @click="() => openAddNewsDialog()"
             label="Nova Postagem"
             color="blue"
@@ -138,7 +139,11 @@ export default {
         .onOk(this.onNewsSubmit)
     },
     openShowNewsDialog (selectedNews) {
-      this.$q.dialog({ component: ShowNewsDialog, news: selectedNews })
+      this.$q.dialog({
+        component: ShowNewsDialog,
+        news: selectedNews,
+        parent: this
+      })
     },
     async onNewsSubmit (selectedNews, news) {
       await this.getNews()

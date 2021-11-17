@@ -5,7 +5,7 @@
         <div class="row q-gutter-sm">
           <q-input
             v-model="search"
-            label="Pesquise pelo nome, cor..."
+            label="Pesquise pelo nome"
             style="width: 300px"
             filled
             dense
@@ -15,6 +15,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="$store.getters['auth/isDCE']"
             @click="() => openAddAthleticDialog()"
             label="Adicionar"
             color="blue"
@@ -28,21 +29,13 @@
         label="Ordem"
         v-model="sortBy"
         :options="sortOptions"
-        style="width: 175px"
+        style="width: 250px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
         clearable
-        rounded
-      />
-      <q-select
-        label="Universidade"
-        v-model="filterUniversity"
-        :options="universityOptions"
-        style="width: 175px"
-        standout="bg-secondary"
-        popup-content-class="bg-secondary"
-        clearable
-        rounded
+        hide-bottom-space
+        outlined
+        dense
       />
     </div>
     <div class="row q-col-gutter-sm">
@@ -115,6 +108,7 @@ export default {
       this.athletics = data
     },
     openAddAthleticDialog (athletic) {
+      if (!this.$store.getters['auth/isDCE']) return
       this.$q
         .dialog({
           component: AddAthleticDialog,
