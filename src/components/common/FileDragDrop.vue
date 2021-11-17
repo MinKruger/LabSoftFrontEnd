@@ -34,7 +34,7 @@
           <!-- <label for="inputFieldHandler" class="block cursor-pointer"> -->
           <div class="text-center">
             <picture class="picture-dropped" v-if="base64File.length > 0">
-              <img :src="base64File" alt="Image">
+              <img :src="base64File" alt="Image" />
             </picture>
             <template v-else>
               <p class="text-h6 text-weight-medium">
@@ -184,7 +184,7 @@ export default {
       const isValid = checkFileType(file, this.accept)
       if (!isValid) {
         this.$q.notify({
-          type: 'alert',
+          type: 'warning',
           message: 'Formato do arquivo não suportado.'
         })
       }
