@@ -15,6 +15,7 @@
             </template>
           </q-input>
           <q-btn
+            v-if="$store.getters['auth/isDCE']"
             @click="() => openAddAthleticDialog()"
             label="Adicionar"
             color="blue"
@@ -107,6 +108,7 @@ export default {
       this.athletics = data
     },
     openAddAthleticDialog (athletic) {
+      if (!this.$store.getters['auth/isDCE']) return
       this.$q
         .dialog({
           component: AddAthleticDialog,
