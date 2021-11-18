@@ -39,7 +39,7 @@
         label="Modalidade"
         v-model="modalityFilterBy"
         :options="modalityOptions"
-        style="width: 175px"
+        style="width: 225px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
         option-label="nome"
@@ -78,7 +78,8 @@ import AddChampionshipDialog from 'src/components/dialogs/AddChampionshipDialog.
 
 const sortByOptions = {
   Alfabética: (a, b) =>
-    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' })
+    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }),
+  Data: (a, b) => b.ano - a.ano
 }
 
 export default {
@@ -141,14 +142,16 @@ export default {
         .dialog({
           component: AddChampionshipDialog,
           championship: selectedChampionship,
-          modalities: this.modalityOptions
+          modalities: this.modalityOptions,
+          parent: this
         })
         .onOk(this.getChampionships)
     },
     openShowChampionshipDialog (selectedChampionship) {
       this.$q.dialog({
         component: ShowChampionshipDialog,
-        championship: selectedChampionship
+        championship: selectedChampionship,
+        parent: this
       })
     }
   }

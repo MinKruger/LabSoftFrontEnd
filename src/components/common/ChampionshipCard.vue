@@ -41,7 +41,9 @@
           </p>
         </div>
       </div>
-      <p v-else class="text-body1" :class="championshipStatus">{{ championshipStatus }}</p>
+      <p v-else class="text-body1" :class="championshipStatus">
+        {{ championshipStatus }}
+      </p>
     </q-card-section>
   </q-card>
 </template>

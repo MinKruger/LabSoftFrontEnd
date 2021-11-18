@@ -21,4 +21,4 @@ export const modalityColors = Object.freeze({
   'League Of Legends': 'blue-grey-6'
 })
 
-export const sortOptions = Object.freeze(['Alfabética'])
+export const sortOptions = Object.freeze(['Alfabética', 'Data'])
