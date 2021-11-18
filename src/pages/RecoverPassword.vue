@@ -74,9 +74,9 @@ export default {
       try {
         this.recoverLoading = true
         // TODO: ver rota correta no backend
-        await this.$axios.post('recover-password', {
-          code: this.code,
-          ...this.user
+        await this.$axios.post('auth/reset_password', {
+          codigo: this.code,
+          senha: this.user.password
         })
         this.$q.notify({
           type: 'positive',

@@ -59,13 +59,25 @@
             dense
           />
         </q-card-section>
-        <q-card-section v-if="innerUser.permissao === 'atletica'">
+        <q-card-section>
           <p class="text-subtitle2 text-uppercase">Atlética</p>
           <q-select
             v-model="innerUser.id_atletica"
             :rules="[required]"
             :options="atleticaOptions"
             placeholder="Selecione"
+            standout="bg-secondary"
+            hide-bottom-space
+            outlined
+            dense
+          />
+        </q-card-section>
+        <q-card-section v-if="!innerUser.id">
+          <p class="text-subtitle2 text-uppercase">Senha</p>
+          <q-input
+            type="password"
+            v-model="innerUser.senha"
+            placeholder="Senha"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -118,7 +130,8 @@ const defaultUser = {
   email: '',
   permissao: '',
   id_atletica: '',
-  instagram: ''
+  instagram: '',
+  senha: ''
 }
 
 export default {
@@ -178,7 +191,8 @@ export default {
         foto: this.innerUser?.foto?.includes('base64') ? this.innerUser.foto.split(',')[1] : this.innerUser.foto,
         permissao: this.innerUser.permissao,
         id_atletica: this.innerUser?.id_atletica?.value ? this.innerUser?.id_atletica?.value : '',
-        instagram: this.innerUser.instagram
+        instagram: this.innerUser.instagram,
+        senha: this.innerUser.senha
       }
 
       const user = this.innerUser.id
