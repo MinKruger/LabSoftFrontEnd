@@ -39,7 +39,7 @@
         label="Modalidade"
         v-model="modalityFilterBy"
         :options="modalityOptions"
-        style="width: 175px"
+        style="width: 225px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
         option-label="nome"
@@ -141,14 +141,16 @@ export default {
         .dialog({
           component: AddChampionshipDialog,
           championship: selectedChampionship,
-          modalities: this.modalityOptions
+          modalities: this.modalityOptions,
+          parent: this
         })
         .onOk(this.getChampionships)
     },
     openShowChampionshipDialog (selectedChampionship) {
       this.$q.dialog({
         component: ShowChampionshipDialog,
-        championship: selectedChampionship
+        championship: selectedChampionship,
+        parent: this
       })
     }
   }
