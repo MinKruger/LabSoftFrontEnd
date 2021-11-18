@@ -57,8 +57,7 @@ export default {
     async getCode () {
       try {
         this.codeLoading = true
-        // TODO: ver rota correta no backend
-        await this.$axios.post('forgot-password', { email: this.email })
+        await this.$axios.post('auth/forgot_password', { email: this.email })
         this.$q.notify({
           type: 'positive',
           message: 'O código para recuperação foi enviado para seu e-mail'
