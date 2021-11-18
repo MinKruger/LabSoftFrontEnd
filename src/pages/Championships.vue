@@ -78,7 +78,8 @@ import AddChampionshipDialog from 'src/components/dialogs/AddChampionshipDialog.
 
 const sortByOptions = {
   Alfabética: (a, b) =>
-    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' })
+    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }),
+  Data: (a, b) => b.ano - a.ano
 }
 
 export default {
