@@ -35,6 +35,7 @@
           <q-select
             v-model="innerChampionship.status"
             :options="statusOptions"
+            :disable="!innerChampionship.id"
             class="bg-secondary"
             input-class="form-input"
             popup-content-class="bg-secondary"
@@ -108,14 +109,15 @@
 <script>
 import DialogHeader from 'src/components/common/DialogHeader.vue'
 import { CHAMPIONSHIPS } from 'src/constants/pages'
-import { statusOptions } from 'src/constants/championships'
+import { AWAITING, statusOptions } from 'src/constants/championships'
 import { required } from 'src/utils/rules'
 
 const defaultChampionship = {
   nome: '',
   id_modalidade: null,
   id_evento: null,
-  ano: null
+  ano: null,
+  status: AWAITING
 }
 
 export default {
