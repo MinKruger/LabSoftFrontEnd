@@ -2,7 +2,7 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin bg-primary news-dialog">
       <dialog-header :icon="headerIcon" title="Visualizar Postagem" />
-      <q-img v-if="news.imagem" width="100%" height="200px" :src="newsImage">
+      <q-img v-if="news.imagem" width="100%" height="200px" :src="news.imagem">
         <div
           class="text-h6 text-weight-bold absolute-bottom"
           style="background: none; z-index: 1"
@@ -75,11 +75,6 @@ export default {
     },
     tags () {
       return this.news.tags?.split(/\s?,\s?/) || []
-    },
-    newsImage () {
-      return this.news.imagem.startsWith('data:')
-        ? this.news.imagem
-        : 'http://' + this.news.imagem
     }
   },
   methods: {

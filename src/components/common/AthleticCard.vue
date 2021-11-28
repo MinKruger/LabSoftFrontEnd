@@ -8,7 +8,7 @@
     <q-img
       v-if="athletic.logo"
       class="absolute-center logo"
-      :src="`http://${athletic.logo}`"
+      :src="athletic.logo"
     />
     <q-img
       v-else
@@ -39,7 +39,7 @@ export default {
 
 <style lang="scss">
 .athletic-card {
-  background: #1F2036;
+  background: #1f2036;
   min-height: 500px;
   // width: 170px;
   overflow: hidden;
@@ -98,8 +98,12 @@ export default {
   }
 
   @keyframes aitf {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
   }
 
   .name {
@@ -124,7 +128,7 @@ export default {
       -webkit-text-fill-color: transparent;
       animation: aitf 80s linear infinite;
 
-      transform: translate3d(0,0,0);
+      transform: translate3d(0, 0, 0);
       backface-visibility: hidden;
     }
   }
