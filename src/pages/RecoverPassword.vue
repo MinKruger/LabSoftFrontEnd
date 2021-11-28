@@ -69,7 +69,15 @@ export default {
     user: { ...defaultUser },
     recoverLoading: false
   }),
+  created () {
+    this.initialize()
+  },
   methods: {
+    initialize () {
+      const { token } = this.$route.query
+
+      if (token) this.code = token
+    },
     async changePassword () {
       try {
         this.recoverLoading = true
