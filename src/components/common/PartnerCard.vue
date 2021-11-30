@@ -1,5 +1,5 @@
 <template>
-  <q-card class="partner-card" flat>
+  <q-card class="partner-card fit" flat>
     <q-card-section class="text-center partner-card-header">
       <q-img
         :src="partner.logo"
@@ -11,7 +11,7 @@
     </q-card-section>
     <q-card-section class="text-center">
       <p class="text-h6 text-weight-bold">
-        {{ partner.nome }}
+        {{ partner.titulo }}
       </p>
       <div class="text-caption">
         {{ partner.descricao }}
@@ -46,6 +46,5 @@ export default {
   background: $secondary;
   top: -15px;
   right: -20px;
-  z-index: 9999999999;
 }
 </style>

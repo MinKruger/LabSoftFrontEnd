@@ -15,11 +15,11 @@
           />
         </dialog-header>
         <q-card-section>
-          <p class="text-subtitle2 text-uppercase">Nome</p>
+          <p class="text-subtitle2 text-uppercase">Título</p>
           <q-input
-            v-model="innerPartner.nome"
+            v-model="innerPartner.titulo"
             :rules="[required]"
-            placeholder="Nome"
+            placeholder="Título"
             standout="bg-secondary"
             hide-bottom-space
             outlined
@@ -77,7 +77,7 @@ import { PARTNERS } from 'src/constants/pages'
 import { required, validDate } from 'src/utils/rules'
 
 const defaultPartner = {
-  nome: '',
+  titulo: '',
   logo: null,
   descricao: ''
 }
@@ -128,10 +128,20 @@ export default {
     async storePartner (partner) {
       const { data } = await this.$axios.post('parceiros', partner)
 
+      this.$q.notify({
+        type: 'positive',
+        message: 'Parceiro cadastrado com sucesso.'
+      })
+
       return data
     },
     async updatePartner (partner) {
       const { data } = await this.$axios.put(`parceiros/${partner.id}`, partner)
+
+      this.$q.notify({
+        type: 'positive',
+        message: 'Parceiro atualizado com sucesso.'
+      })
 
       return data
     },
@@ -156,7 +166,7 @@ export default {
           await this.$axios.delete(`parceiros/${this.innerPartner.id}`)
           this.$q.notify({
             type: 'positive',
-            message: 'Atlética excluída com sucesso.'
+            message: 'Parceiro excluída com sucesso.'
           })
           this.onDelete && this.onDelete(this.innerPartner)
           this.hide()

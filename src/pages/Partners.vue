@@ -61,16 +61,7 @@ export default {
     sortByOptions,
     search: '',
     // Parceiros
-    partners: [
-      {
-        id: 1,
-        nome: 'Outback',
-        descricao:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum iaculis libero, non consectetur lectus facilisis et. ',
-        logo:
-          'https://logodownload.org/wp-content/uploads/2016/09/Outback-logo-9.png'
-      }
-    ]
+    partners: []
   }),
   computed: {
     filteredPartners () {
@@ -78,7 +69,7 @@ export default {
 
       if (this.search) {
         partners = partners.filter(partner =>
-          partner.nome
+          partner.titulo
             .normalize()
             .toUpperCase()
             .includes(this.search.normalize().toUpperCase())
@@ -88,6 +79,9 @@ export default {
 
       return partners
     }
+  },
+  async created () {
+    await this.getPartners()
   },
   methods: {
     async getPartners () {
@@ -106,7 +100,7 @@ export default {
           }
         })
         .onOk(async _partner => {
-          await this.getParners()
+          await this.getPartners()
         })
     }
   }
