@@ -4,8 +4,8 @@
       <q-form @submit.prevent="submit">
         <dialog-header :icon="headerIcon" :title="headerTitle">
           <q-btn
-            v-if="innerAthletic.id"
-            @click="deleteAthletic"
+            v-if="innerPartner.id"
+            @click="deletePartner"
             icon="o_delete_forever"
             class="absolute-top-right"
             color="pink"
@@ -15,13 +15,27 @@
           />
         </dialog-header>
         <q-card-section>
-          <p class="text-subtitle2 text-uppercase">Nome</p>
+          <p class="text-subtitle2 text-uppercase">Título</p>
           <q-input
-            v-model="innerAthletic.nome"
+            v-model="innerPartner.titulo"
             :rules="[required]"
-            placeholder="Nome"
+            placeholder="Título"
             standout="bg-secondary"
             hide-bottom-space
+            outlined
+            dense
+          />
+        </q-card-section>
+        <q-card-section>
+          <p class="text-subtitle2 text-uppercase">Descrição</p>
+          <q-input
+            v-model="innerPartner.descricao"
+            :rules="[required]"
+            placeholder="Digite uma breve descrição"
+            standout="bg-secondary"
+            input-style="min-height: 5rem"
+            hide-bottom-space
+            autogrow
             outlined
             dense
           />
@@ -29,21 +43,9 @@
         <q-card-section>
           <p class="text-subtitle2 text-uppercase">Logo</p>
           <file-drag-drop
-            v-model="innerAthletic.logo"
+            v-model="innerPartner.logo"
             :rules="[required]"
             hide-bottom-space
-          />
-        </q-card-section>
-        <q-card-section>
-          <p class="text-subtitle2 text-uppercase">Data de Criação</p>
-          <date-picker
-            v-model="innerAthletic.data_criacao"
-            :rules="[required]"
-            placeholder="Data de Criação"
-            standout="bg-secondary"
-            hide-bottom-space
-            outlined
-            dense
           />
         </q-card-section>
         <q-card-actions align="right" class="q-pa-md">
@@ -58,7 +60,7 @@
           <q-btn
             type="submit"
             color="blue"
-            :label="innerAthletic.id ? 'Salvar' : 'Adicionar'"
+            :label="innerPartner.id ? 'Salvar' : 'Adicionar'"
             padding="sm md"
             class="text-weight-bold"
           />
@@ -71,33 +73,32 @@
 <script>
 import DialogHeader from 'src/components/common/DialogHeader.vue'
 import FileDragDrop from 'src/components/common/FileDragDrop.vue'
-import DatePicker from 'src/components/common/DatePicker.vue'
-import { ATHLETICS } from 'src/constants/pages'
+import { PARTNERS } from 'src/constants/pages'
 import { required, validDate } from 'src/utils/rules'
 
-const defaultAhletic = {
-  nome: '',
+const defaultPartner = {
+  titulo: '',
   logo: null,
-  data_criacao: ''
+  descricao: ''
 }
 
 export default {
-  components: { DialogHeader, FileDragDrop, DatePicker },
+  components: { DialogHeader, FileDragDrop },
   props: {
-    athletic: Object,
+    partner: Object,
     onDelete: Function
   },
   data: () => ({
-    headerIcon: ATHLETICS.icon,
-    innerAthletic: { ...defaultAhletic }
+    headerIcon: PARTNERS.icon,
+    innerPartner: { ...defaultPartner }
   }),
   computed: {
     headerTitle () {
-      return this.innerAthletic.id ? 'Editar Atlética' : 'Nova Atlética'
+      return this.innerPartner.id ? 'Editar Parceiro' : 'Novo Parceiro'
     }
   },
   created () {
-    if (this.athletic) Object.assign(this.innerAthletic, this.athletic)
+    if (this.partner) Object.assign(this.innerPartner, this.partner)
   },
   methods: {
     show () {
@@ -110,48 +111,45 @@ export default {
       this.$emit('hide')
     },
     async submit () {
-      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64')
-        ? this.innerAthletic.logo.split(',')[1]
-        : this.innerAthletic.logo
+      this.innerPartner.logo = this.innerPartner?.logo?.includes('base64')
+        ? this.innerPartner.logo.split(',')[1]
+        : this.innerPartner.logo
 
-      const athletic = this.innerAthletic.id
-        ? await this.updateAthletic(this.innerAthletic)
-        : await this.storeAthletic(this.innerAthletic)
+      const partner = this.innerPartner.id
+        ? await this.updatePartner(this.innerPartner)
+        : await this.storePartner(this.innerPartner)
 
-      this.$emit('ok', athletic)
+      this.$emit('ok', partner)
       this.hide()
     },
     onCancelClick () {
       this.hide()
     },
-    async storeAthletic (athletic) {
-      const { data } = await this.$axios.post('atleticas', athletic)
+    async storePartner (partner) {
+      const { data } = await this.$axios.post('parceiros', partner)
 
       this.$q.notify({
         type: 'positive',
-        message: 'Atlética cadastrada com sucesso.'
+        message: 'Parceiro cadastrado com sucesso.'
       })
 
       return data
     },
-    async updateAthletic (athletic) {
-      const { data } = await this.$axios.put(
-        `atleticas/${athletic.id}`,
-        athletic
-      )
+    async updatePartner (partner) {
+      const { data } = await this.$axios.put(`parceiros/${partner.id}`, partner)
 
       this.$q.notify({
         type: 'positive',
-        message: 'Atlética atualizada com sucesso.'
+        message: 'Parceiro atualizado com sucesso.'
       })
 
       return data
     },
-    deleteAthletic () {
+    deletePartner () {
       this.$q
         .dialog({
-          title: 'Excluir Atlética',
-          message: 'Deseja realmente excluir esta atlética?',
+          title: 'Excluir Parceiro',
+          message: 'Deseja realmente excluir este parceiro?',
           class: 'bg-primary',
           ok: {
             label: 'Excluir',
@@ -165,12 +163,12 @@ export default {
           }
         })
         .onOk(async () => {
-          await this.$axios.delete(`atleticas/${this.innerAthletic.id}`)
+          await this.$axios.delete(`parceiros/${this.innerPartner.id}`)
           this.$q.notify({
             type: 'positive',
-            message: 'Atlética excluída com sucesso.'
+            message: 'Parceiro excluída com sucesso.'
           })
-          this.onDelete && this.onDelete(this.innerAthletic)
+          this.onDelete && this.onDelete(this.innerPartner)
           this.hide()
         })
     },

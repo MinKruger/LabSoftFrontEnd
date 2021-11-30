@@ -4,7 +4,7 @@
       v-if="news.imagem"
       width="150px"
       height="150px"
-      :src="newsImage"
+      :src="news.imagem"
       style="min-width: 150px"
     >
       <div class="fit news-card-image-gradient" />
@@ -83,11 +83,6 @@ export default {
         date.extractDate(this.news.data_evento, 'DD/MM/YYYY'),
         'DD, MMMM [de] YYYY'
       )
-    },
-    newsImage () {
-      return this.news.imagem.startsWith('data:')
-        ? this.news.imagem
-        : 'http://' + this.news.imagem
     },
     newsDescription () {
       return removeHtmlTags(this.news.descricao)
