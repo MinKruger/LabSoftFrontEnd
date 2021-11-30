@@ -110,7 +110,9 @@ export default {
       this.$emit('hide')
     },
     async submit () {
-      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64') ? this.innerAthletic.logo.split(',')[1] : this.innerAthletic.logo
+      this.innerAthletic.logo = this.innerAthletic?.logo?.includes('base64')
+        ? this.innerAthletic.logo.split(',')[1]
+        : this.innerAthletic.logo
 
       const athletic = this.innerAthletic.id
         ? await this.updateAthletic(this.innerAthletic)
@@ -125,6 +127,11 @@ export default {
     async storeAthletic (athletic) {
       const { data } = await this.$axios.post('atleticas', athletic)
 
+      this.$q.notify({
+        type: 'positive',
+        message: 'Atlética cadastrada com sucesso.'
+      })
+
       return data
     },
     async updateAthletic (athletic) {
@@ -132,6 +139,11 @@ export default {
         `atleticas/${athletic.id}`,
         athletic
       )
+
+      this.$q.notify({
+        type: 'positive',
+        message: 'Atlética atualizada com sucesso.'
+      })
 
       return data
     },
