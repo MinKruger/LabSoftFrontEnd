@@ -83,10 +83,10 @@ export default {
             ...PAGE.MATCHES,
             to: { name: 'Matches' }
           },
-          {
-            ...PAGE.PLAYERS,
-            to: { name: 'Players' }
-          },
+          // {
+          //   ...PAGE.PLAYERS,
+          //   to: { name: 'Players' }
+          // },
           {
             ...PAGE.NEWS,
             to: { name: 'News' }

@@ -48,7 +48,7 @@ export default {
       return this.athletics.find(e => e.id === athleticId)?.nome || ''
     },
     athleticPicture (athleticId) {
-      return `http://${this.athletics.find(e => e.id === athleticId)?.logo}` || ''
+      return `${this.athletics.find(e => e.id === athleticId)?.logo}` || ''
     }
   }
 }
@@ -101,6 +101,7 @@ export default {
         width: 100%;
         height: 100px;
         display: block;
+        margin-bottom: 8px;
 
         img {
           width: 100%;

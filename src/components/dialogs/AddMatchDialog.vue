@@ -61,7 +61,6 @@
             <q-input
               v-model="innerMatch.placar1"
               mask="###"
-              :rules="[required]"
               placeholder="Placar 1"
               standout="bg-secondary"
               hide-bottom-space
@@ -89,7 +88,6 @@
             <q-input
               v-model="innerMatch.placar2"
               mask="###"
-              :rules="[required]"
               placeholder="Placar 1"
               standout="bg-secondary"
               hide-bottom-space
@@ -113,6 +111,7 @@
           <div class="field">
             <p class="text-subtitle2 text-uppercase">Hora do jogo</p>
             <q-input
+              v-model="innerMatch.hora_jogo"
               mask="##:##"
               standout="bg-secondary"
               hide-bottom-space
@@ -209,6 +208,7 @@ export default {
     }
   },
   created () {
+    console.log(this.match)
     if (this.match) {
       Object.assign(this.innerMatch, this.match)
 
@@ -236,7 +236,8 @@ export default {
         placar1: this.innerMatch.placar1,
         placar2: this.innerMatch.placar2,
         local: this.innerMatch.local,
-        id_fase: this.innerMatch.id_fase
+        id_fase: this.innerMatch.id_fase,
+        id_campeonato: this.innerMatch.id_campeonato.value
       }
 
       const match = this.innerMatch.id

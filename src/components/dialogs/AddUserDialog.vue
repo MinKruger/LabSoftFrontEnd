@@ -59,11 +59,10 @@
             dense
           />
         </q-card-section>
-        <q-card-section>
+        <q-card-section v-if="innerUser.permissao === 'atletica'">
           <p class="text-subtitle2 text-uppercase">Atlética</p>
           <q-select
             v-model="innerUser.id_atletica"
-            :rules="[required]"
             :options="atleticaOptions"
             placeholder="Selecione"
             standout="bg-secondary"

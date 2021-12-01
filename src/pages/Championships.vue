@@ -29,25 +29,29 @@
         label="Ordem"
         v-model="sortBy"
         :options="sortOptions"
-        style="width: 175px"
+        style="width: 250px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
         clearable
-        rounded
+        hide-bottom-space
+        outlined
+        dense
       />
       <q-select
         label="Modalidade"
         v-model="modalityFilterBy"
         :options="modalityOptions"
-        style="width: 225px"
+        style="width: 250px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        clearable
+        hide-bottom-space
+        outlined
+        dense
         option-label="nome"
         option-value="id"
         map-options
         emit-value
-        clearable
-        rounded
       />
     </div>
     <div class="row q-col-gutter-sm">
