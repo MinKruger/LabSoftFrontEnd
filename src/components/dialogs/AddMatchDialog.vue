@@ -208,7 +208,6 @@ export default {
     }
   },
   created () {
-    console.log(this.match)
     if (this.match) {
       Object.assign(this.innerMatch, this.match)
 
