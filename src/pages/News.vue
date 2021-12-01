@@ -29,24 +29,29 @@
         label="Categoria"
         v-model="categoryFilterBy"
         :options="categoryFilterOptions"
-        style="width: 175px"
+        style="width: 250px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        clearable
+        hide-bottom-space
+        outlined
+        dense
         map-options
         emit-value
-        rounded
       />
       <q-select
         label="Intervalo"
         v-model="intervalFilterBy"
         :options="intervalFilterOptions"
-        style="width: 200px"
+        style="width: 250px"
         standout="bg-secondary"
         popup-content-class="bg-secondary"
+        clearable
+        hide-bottom-space
+        outlined
+        dense
         map-options
         emit-value
-        clearable
-        rounded
       />
     </div>
     <div class="row q-col-gutter-sm">
