@@ -189,9 +189,12 @@ export default {
         email: this.innerUser.email,
         foto: this.innerUser?.foto?.includes('base64') ? this.innerUser.foto.split(',')[1] : this.innerUser.foto,
         permissao: this.innerUser.permissao,
-        id_atletica: this.innerUser?.id_atletica?.value ? this.innerUser?.id_atletica?.value : '',
         instagram: this.innerUser.instagram,
         senha: this.innerUser.senha
+      }
+
+      if (this.innerUser?.id_atletica?.value?.length > 0) {
+        payload.id_atletica = this.innerUser?.id_atletica?.value
       }
 
       const user = this.innerUser.id
