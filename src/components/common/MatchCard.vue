@@ -1,11 +1,16 @@
 <template>
   <q-card class="bg-match-card" flat>
     <div class="champ">
-      <span class="name">
-        Campeonato Dale
-      </span>
-      <div class="label">
-        Futsal
+      <div class="name">
+        {{championshipName(match)}} ({{phaseName(match)}})
+      </div>
+      <div class="label-date">
+        <div class="label" :class="color(match)">
+          {{modalityName(match)}}
+        </div>
+        <div class="date">
+          {{match.data_jogo}} - {{match.hora_jogo}}
+        </div>
       </div>
     </div>
     <div class="score">
@@ -33,17 +38,41 @@
 </template>
 
 <script>
+import { modalityColors } from 'src/constants/championships'
 export default {
   name: 'MatchCard',
   props: {
     athletics: Array,
     championships: Array,
+    phases: Array,
     match: {
       type: Object,
       required: true
     }
   },
   methods: {
+    color (match) {
+      const championship = this.championships.find(e => e.id === match.id_campeonato)
+
+      const color = modalityColors[championship?.modalidade?.nome]
+
+      return `bg-${color}` || ''
+    },
+    phaseName (match) {
+      const phase = this.phases?.find(e => e.id === match.id_fase)
+
+      return phase?.nome
+    },
+    championshipName (match) {
+      const championship = this.championships.find(e => e.id === match.id_campeonato)
+
+      return championship?.nome
+    },
+    modalityName (match) {
+      const championship = this.championships.find(e => e.id === match.id_campeonato)
+
+      return championship?.modalidade.nome
+    },
     athleticName (athleticId) {
       return this.athletics.find(e => e.id === athleticId)?.nome || ''
     },
@@ -68,15 +97,19 @@ export default {
   }
 
   .champ {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
 
     .name {
       font-size: 12px;
       font-weight: 700;
       color: $text1;
+      margin-bottom: 4px;
+    }
+
+    .label-date {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     .label {
@@ -88,6 +121,15 @@ export default {
       border-radius: 3px;
       text-transform: uppercase;
       padding: 2px 4px;
+      width: fit-content;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    .date {
+      font-size: 11px;
+      font-weight: 600;
+      color: $text2;
     }
   }
 

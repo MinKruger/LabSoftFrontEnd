@@ -160,13 +160,16 @@ import { MATCHES } from 'src/constants/pages'
 import { required } from 'src/utils/rules'
 
 const defaultMatch = {
-  id: '',
-  nome: '',
-  foto: null,
-  email: '',
-  permissao: '',
-  id_atletica: '',
-  instagram: ''
+  data_jogo: '',
+  hora_jogo: '',
+  id: null,
+  id_campeonato: null,
+  id_fase: null,
+  id_time1: null,
+  id_time2: null,
+  local: '',
+  placar1: 0,
+  placar2: 0
 }
 
 export default {
@@ -174,6 +177,7 @@ export default {
   props: {
     match: Object,
     athletics: Array,
+    phases: Array,
     championships: Array,
     onDelete: Function
   },
@@ -181,10 +185,18 @@ export default {
     headerIcon: MATCHES.icon,
     innerMatch: { ...defaultMatch },
     permissao: '',
-    id_atletica: '',
-    faseOptions: ['Grupo', 'Oitavas', 'Quartas', 'Semifinal', 'Final']
+    id_atletica: ''
   }),
   computed: {
+    faseOptions () {
+      return this.phases.map(e => {
+        return {
+          label: e.nome,
+          value: e.id,
+          description: e.nome
+        }
+      })
+    },
     headerTitle () {
       return this.innerMatch.id ? 'Editar Jogo' : 'Novo Jogo'
     },
@@ -215,6 +227,7 @@ export default {
 
       this.innerMatch.id_time1 = this.atleticaOptions.find(e => e.value === this.innerMatch.id_time1)
       this.innerMatch.id_time2 = this.atleticaOptions.find(e => e.value === this.innerMatch.id_time2)
+      this.innerMatch.id_fase = this.faseOptions.find(e => e.value === this.innerMatch.id_fase)
     }
   },
   methods: {
@@ -232,10 +245,11 @@ export default {
         id_time1: this.innerMatch?.id_time1?.value ? this.innerMatch?.id_time1?.value : '',
         id_time2: this.innerMatch?.id_time2?.value ? this.innerMatch?.id_time2?.value : '',
         data_jogo: this.innerMatch.data_jogo,
+        hora_jogo: this.innerMatch.hora_jogo,
         placar1: this.innerMatch.placar1,
         placar2: this.innerMatch.placar2,
         local: this.innerMatch.local,
-        id_fase: this.innerMatch.id_fase,
+        id_fase: this.innerMatch?.id_fase?.value ? this.innerMatch?.id_fase?.value : '',
         id_campeonato: this.innerMatch.id_campeonato.value
       }
 
