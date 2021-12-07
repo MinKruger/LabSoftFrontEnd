@@ -15,6 +15,7 @@
           @click.native="openAddMatchDialog(match)"
           :match="match"
           :athletics="athletics"
+          :phases="phases"
           :championships="championships"
         />
       </div>
@@ -60,6 +61,7 @@ export default {
     matches: [],
     athletics: [],
     championships: [],
+    phases: [],
     search: '',
     news: []
   }),
@@ -68,6 +70,7 @@ export default {
     await this.getChampionships()
     await this.getMatches()
     await this.getNews()
+    await this.getPhases()
   },
   computed: {
     filteredNews () {
@@ -77,60 +80,31 @@ export default {
       return this.championships.map(e => e.modalidade.nome)
     },
     filteredMatches () {
-      const bdMatches = [...this.matches]
+      let matches = [...this.matches]
 
-      // if (this.search) {
-      //   matches = matches.filter(match =>
-      //     match.nome
-      //       .normalize()
-      //       .toUpperCase()
-      //       .includes(this.search.normalize().toUpperCase())
-      //   )
-      // }
+      matches = matches.filter(
+        match => {
+          const selectedDate = new Date()
+          selectedDate.setDate(selectedDate.getDate() - 30)
 
-      const matches = [
-        {
-          id: 'x1',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
-        },
-        {
-          id: 'x2',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
-        },
-        {
-          id: 'x3',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
+          const matchDate = new Date(match.data_jogo.split('/').reverse().join('-'))
+          matchDate.setDate(matchDate.getDate() + 1)
+
+          return matchDate > selectedDate
         }
-      ]
+      )
 
-      return bdMatches.length > 0 ? bdMatches : matches
+      return matches
     }
   },
   methods: {
     async getMatches () {
       const { data } = await this.$axios.get('jogos')
       this.matches = data
+    },
+    async getPhases () {
+      const { data } = await this.$axios.get('fases')
+      this.phases = data
     },
     async getChampionships () {
       const { data } = await this.$axios.get('campeonatos', {
@@ -153,6 +127,7 @@ export default {
           match,
           athletics: this.athletics,
           championships: this.championships,
+          phases: this.phases,
           onDelete: _match => {
             const index = this.matches.findIndex(a => a.id === _match.id)
             if (index > -1) this.matches.splice(index, 1)

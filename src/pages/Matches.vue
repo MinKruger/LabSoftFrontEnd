@@ -6,7 +6,7 @@
           <q-input
             filled
             v-model="search"
-            label="Pesquise pelo nome"
+            label="Pesquise pelo local"
             style="width: 300px"
             dense
           >
@@ -26,20 +26,8 @@
     </page-header>
     <div class="row q-gutter-sm q-mb-md">
       <q-select
-        label="Ordem"
-        v-model="sortBy"
-        :options="sortOptions"
-        style="width: 200px"
-        standout="bg-secondary"
-        popup-content-class="bg-secondary"
-        clearable
-        hide-bottom-space
-        outlined
-        dense
-      />
-      <q-select
         label="Modalidade"
-        v-model="sortModalidade"
+        v-model="modalityFilterBy"
         :options="modalidadeOptions"
         style="width: 200px"
         standout="bg-secondary"
@@ -65,7 +53,7 @@
     </div>
     <div class="matches-grid">
       <div
-        v-for="match in filteredMatches"
+        v-for="match in todayMatches"
         :key="match.id"
         class="col-6 col-sm-4 col-md-2 col-xl-1"
       >
@@ -89,6 +77,7 @@
         <match-card
           @click.native="openAddMatchDialog(match)"
           :match="match"
+          :phases="phases"
           :athletics="athletics"
           :championships="championships"
         />
@@ -110,79 +99,81 @@ export default {
   name: 'Matches',
   data: () => ({
     headerInfo: MATCHES,
-    sortBy: null,
-    sortModalidade: null,
+    modalityFilterBy: null,
     sortDate: null,
     sortOptions,
     matches: [],
     athletics: [],
     championships: [],
+    phases: [],
     search: ''
   }),
   async created () {
     await this.getAthletics()
     await this.getChampionships()
     await this.getMatches()
+    await this.getPhases()
   },
   computed: {
     modalidadeOptions () {
-      return this.championships.map(e => e.modalidade.nome)
+      return [...new Set(this.championships.map(e => e.modalidade.nome))]
+    },
+    todayMatches () {
+      return this.filteredMatches.filter(match => {
+        const todayDate = new Date()
+        const matchDate = new Date(match.data_jogo.split('/').reverse().join('-'))
+        matchDate.setDate(matchDate.getDate() + 1)
+
+        return todayDate.toDateString() === matchDate.toDateString()
+      })
     },
     filteredMatches () {
-      const bdMatches = [...this.matches]
+      let matches = [...this.matches]
 
-      // if (this.search) {
-      //   matches = matches.filter(match =>
-      //     match.nome
-      //       .normalize()
-      //       .toUpperCase()
-      //       .includes(this.search.normalize().toUpperCase())
-      //   )
-      // }
+      if (this.search) {
+        matches = matches.filter(match =>
+          match.local
+            .normalize()
+            .toUpperCase()
+            .includes(this.search.normalize().toUpperCase())
+        )
+      }
 
-      const matches = [
-        {
-          id: 'x1',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
-        },
-        {
-          id: 'x2',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
-        },
-        {
-          id: 'x3',
-          id_campeonato: '389731b8-e263-41cc-9490-8c3177caf30b',
-          data_jogo: '05/11/1998',
-          id_fase: 'Grupo',
-          id_time1: '77497e0d-2c33-44d9-ae3c-2bf464ea1fe8',
-          id_time2: '7bb278fc-5101-4a5b-a001-bc08fdbd1ccb',
-          local: 'dale',
-          placar1: '50',
-          placar2: '120'
-        }
-      ]
+      if (this.modalityFilterBy) {
+        matches = matches.filter(
+          match => {
+            const championship = this.championships.find(e => e.id === match.id_campeonato)
 
-      return bdMatches.length > 0 ? bdMatches : matches
+            return championship.modalidade.nome === this.modalityFilterBy
+          }
+        )
+      }
+
+      if (this.sortDate) {
+        matches = matches.filter(
+          match => {
+            const selectedDate = new Date(this.sortDate.split('/').reverse().join('-'))
+            selectedDate.setDate(selectedDate.getDate() + 1)
+
+            const matchDate = new Date(match.data_jogo.split('/').reverse().join('-'))
+            matchDate.setDate(matchDate.getDate() + 1)
+
+            return matchDate > selectedDate
+          }
+        )
+      }
+
+      return matches
     }
   },
   methods: {
     async getMatches () {
       const { data } = await this.$axios.get('jogos')
       this.matches = data
+    },
+    async getPhases () {
+      const { data } = await this.$axios.get('fases')
+      this.phases = data
     },
     async getChampionships () {
       const { data } = await this.$axios.get('campeonatos', {
@@ -205,6 +196,7 @@ export default {
           match,
           athletics: this.athletics,
           championships: this.championships,
+          phases: this.phases,
           onDelete: _match => {
             const index = this.matches.findIndex(a => a.id === _match.id)
             if (index > -1) this.matches.splice(index, 1)
