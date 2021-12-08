@@ -4,9 +4,18 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-drawer"
+      content-class="bg-drawer relative"
       :width="275"
     >
+      <div class="q-pa-md absolute-top-right">
+        <q-btn
+          v-if="$q.screen.lt.md"
+          @click="leftDrawerOpen = false"
+          icon="close"
+          flat
+          round
+        />
+      </div>
       <div class="text-center">
         <q-img src="logo.png" width="50%" />
       </div>
