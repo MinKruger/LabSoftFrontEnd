@@ -94,7 +94,7 @@ export default {
     async addParticipant (athletic) {
       const participant = {
         pontuacao: 0,
-        id_atletica: athletic.id,
+        ids_atleticas: [athletic.id],
         id_campeonato: this.championship.id
       }
 
