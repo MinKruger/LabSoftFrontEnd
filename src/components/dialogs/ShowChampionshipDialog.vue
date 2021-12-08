@@ -150,7 +150,7 @@ export default {
         }
       })
 
-      this.participants = data.sort((a, b) => a.pontuacao - b.pontuacao)
+      this.participants = data.sort((a, b) => b.pontuacao - a.pontuacao)
     },
     editParticipants () {
       this.$q
