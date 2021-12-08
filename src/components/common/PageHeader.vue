@@ -1,6 +1,14 @@
 <template>
-  <div class="full-width row q-gutter-x-md q-mb-lg">
-    <div class="col-auto text-h5 row items-center">
+  <div class="full-width row q-gutter-x-md q-mb-lg overflow-hidden">
+    <div
+      :class="[
+        $q.screen.gt.xs ? 'col-auto' : 'col-12',
+        'text-h5',
+        'row',
+        'items-center',
+        'overflow-hidden'
+      ]"
+    >
       <q-icon
         @click="toggleLeftDrawer"
         v-if="icon"
