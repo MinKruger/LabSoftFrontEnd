@@ -3,16 +3,6 @@
     <q-card class="q-dialog-plugin" style="background: #1B1C30">
       <q-form @submit.prevent="submit">
         <dialog-header :icon="headerIcon" :title="headerTitle">
-          <q-btn
-            v-if="innerChampionship.id"
-            @click="deleteChampionship"
-            icon="o_delete_forever"
-            class="absolute-top-right"
-            color="pink"
-            style="top: 10px; right: 10px"
-            flat
-            round
-          />
         </dialog-header>
         <q-card-section>
           <form-field
