@@ -3,16 +3,6 @@
     <q-card class="q-dialog-plugin" style="background: #1B1C30">
       <q-form @submit.prevent="submit">
         <dialog-header :icon="headerIcon" :title="headerTitle">
-          <q-btn
-            v-if="innerMatch.id"
-            @click="deleteMatch"
-            icon="o_delete_forever"
-            class="absolute-top-right"
-            color="pink"
-            style="top: 10px; right: 10px"
-            flat
-            round
-          />
         </dialog-header>
         <q-card-section class="double-column">
           <div class="field">
@@ -48,7 +38,7 @@
             <q-select
               v-model="innerMatch.id_time1"
               :rules="[required]"
-              :options="atleticaOptions"
+              :options="firstAtleticaOptions"
               placeholder="Selecione"
               standout="bg-secondary"
               hide-bottom-space
@@ -75,7 +65,7 @@
             <q-select
               v-model="innerMatch.id_time2"
               :rules="[required]"
-              :options="atleticaOptions"
+              :options="secondAtleticaOptions"
               placeholder="Selecione"
               standout="bg-secondary"
               hide-bottom-space
@@ -208,6 +198,12 @@ export default {
           description: e.nome
         }
       })
+    },
+    firstAtleticaOptions () {
+      return this.atleticaOptions.filter(e => e.value !== this.innerMatch?.id_time2?.value)
+    },
+    secondAtleticaOptions () {
+      return this.atleticaOptions.filter(e => e.value !== this.innerMatch?.id_time1?.value)
     },
     campeonatoOptions () {
       return this.championships.map(e => {
