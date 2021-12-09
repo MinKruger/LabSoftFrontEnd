@@ -15,7 +15,7 @@
           <form-field
             v-model.number="innerChampionship.ano"
             label="Ano"
-            :rules="[required]"
+            :rules="[required, val => val > 2000 || 'Ano inválido']"
           />
         </q-card-section>
         <q-card-section>
